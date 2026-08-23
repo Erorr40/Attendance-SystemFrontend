@@ -23,6 +23,7 @@ import { AttendanceCorrectionModal } from './components/dashboard/AttendanceCorr
 import { WelcomeSplashScreen } from './components/common/WelcomeSplashScreen.tsx';
 import { SkeletonPageLayout } from './components/common/SkeletonPageLayout.tsx';
 import { SystemLogsView } from './components/views/SystemLogsView.tsx';
+import { DevDiagnosticsView } from './components/views/DevDiagnosticsView.tsx';
 import { ToastProvider, useToast } from './components/common/Toast.tsx';
 import { api } from './services/api.ts';
 import {
@@ -39,11 +40,42 @@ import {
   NotificationItem,
 } from './types/index.ts';
 
+function checkIsDevRoute(): boolean {
+  if (typeof window === 'undefined') return false;
+  const p = window.location.pathname.toLowerCase();
+  const h = window.location.hash.toLowerCase();
+  const s = window.location.search.toLowerCase();
+  return (
+    p === '/dev' ||
+    p.endsWith('/dev') ||
+    p.endsWith('/dev/') ||
+    h === '#dev' ||
+    h === '#/dev' ||
+    s.includes('view=dev') ||
+    s.includes('dev=true')
+  );
+}
+
 function MainAppContent() {
   const { showToast } = useToast();
 
-  // Splash Screen & Loading Skeleton State
-  const [showSplash, setShowSplash] = useState<boolean>(true);
+  // /dev Route Diagnostics State
+  const [isDevMode, setIsDevMode] = useState<boolean>(() => checkIsDevRoute());
+
+  useEffect(() => {
+    const handleUrlChange = () => {
+      setIsDevMode(checkIsDevRoute());
+    };
+    window.addEventListener('popstate', handleUrlChange);
+    window.addEventListener('hashchange', handleUrlChange);
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener('hashchange', handleUrlChange);
+    };
+  }, []);
+
+  // Splash Screen & Loading Skeleton State (Only show on explicit login, never to unauthenticated visitors)
+  const [showSplash, setShowSplash] = useState<boolean>(false);
   const [isInitialLoading, setIsInitialLoading] = useState<boolean>(true);
 
   // Authentication State
@@ -58,10 +90,20 @@ function MainAppContent() {
     return (saved as UserRole) || 'hr_admin';
   });
 
+  const [sessionUser, setSessionUser] = useState<any>(() => {
+    try {
+      const saved = localStorage.getItem('elswedy_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
   const handleLoginSuccess = (user: any, token: string) => {
     localStorage.setItem('elswedy_auth_token', token);
     localStorage.setItem('elswedy_role', user.role);
     localStorage.setItem('elswedy_user', JSON.stringify(user));
+    setSessionUser(user);
     setCurrentRole(user.role);
     setIsAuthenticated(true);
     setShowSplash(true);
@@ -77,6 +119,7 @@ function MainAppContent() {
     localStorage.removeItem('elswedy_auth_token');
     localStorage.removeItem('elswedy_role');
     localStorage.removeItem('elswedy_user');
+    setSessionUser(null);
     setIsAuthenticated(false);
     showToast('Logged out successfully', 'info');
   };
@@ -331,11 +374,12 @@ function MainAppContent() {
 
   const currentTeacher = teachers.find((t) => t.id === 'tch-01') || teachers[0];
   const currentUserName =
-    currentRole === 'hr_admin'
+    sessionUser?.name ||
+    (currentRole === 'hr_admin'
       ? 'Mariam Soliman (HR Admin)'
       : currentRole === 'board'
       ? 'Eng. Ahmed Rafat (Board Observer)'
-      : currentTeacher?.fullName || 'Eng. Ahmed Hassan';
+      : currentTeacher?.fullName || 'Eng. Ahmed Hassan');
   const teacherTodayRecord = todayRecords.find((r) => r.teacherId === currentTeacher?.id);
   const teacherHistoryRecords = allAttendanceRecords.filter(
     (r) => r.teacherId === currentTeacher?.id
@@ -343,17 +387,33 @@ function MainAppContent() {
   const teacherLeaves = leaves.filter((l) => l.teacherId === currentTeacher?.id);
   const teacherSchedule = schedules.find((s) => s.id === currentTeacher?.scheduleId);
 
+  // Dedicated /dev Developer Diagnostics Route
+  if (isDevMode) {
+    return (
+      <DevDiagnosticsView
+        onBackToApp={() => {
+          if (typeof window !== 'undefined') {
+            window.history.pushState({}, '', '/');
+          }
+          setIsDevMode(false);
+        }}
+        isDarkMode={isDarkMode}
+      />
+    );
+  }
+
   return (
     <>
-      {/* Welcome Splash Screen */}
-      {showSplash && (
+      {/* Welcome Splash Screen - ONLY shown after explicit successful login */}
+      {isAuthenticated && showSplash && (
         <WelcomeSplashScreen
           userName={
-            currentRole === 'teacher' || currentRole === 'employee'
-              ? currentTeacher?.fullName || 'Eng. Ahmed Hassan'
+            sessionUser?.name ||
+            (currentRole === 'teacher' || currentRole === 'employee'
+              ? currentTeacher?.fullName || 'Faculty Member'
               : currentRole === 'board'
               ? 'Eng. Ahmed Rafat'
-              : 'Mariam Soliman'
+              : 'Mariam Soliman')
           }
           userRoleTitle={
             currentRole === 'hr_admin'
