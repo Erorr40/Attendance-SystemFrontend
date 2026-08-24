@@ -18,6 +18,7 @@ import {
   Check,
   ArrowLeft,
   Zap,
+  Sparkles,
 } from 'lucide-react';
 import { api } from '../../services/api.ts';
 
@@ -51,6 +52,8 @@ export const DevDiagnosticsView: React.FC<DevDiagnosticsViewProps> = ({
   const [lastSseEvent, setLastSseEvent] = useState<string | null>(null);
   const [reconnectingDb, setReconnectingDb] = useState<boolean>(false);
   const [dbReconnectMsg, setDbReconnectMsg] = useState<string | null>(null);
+  const [seeding, setSeeding] = useState<boolean>(false);
+  const [seedMsg, setSeedMsg] = useState<string | null>(null);
   const [copied, setCopied] = useState<boolean>(false);
   const [authStatus, setAuthStatus] = useState<{
     hasToken: boolean;
@@ -175,6 +178,21 @@ export const DevDiagnosticsView: React.FC<DevDiagnosticsViewProps> = ({
       setDbReconnectMsg(err.message || 'Reconnect request failed');
     } finally {
       setReconnectingDb(false);
+    }
+  };
+
+  // Handle Seed Data
+  const handleSeedData = async () => {
+    setSeeding(true);
+    setSeedMsg(null);
+    try {
+      const res = await api.seedDatabase();
+      setSeedMsg(`✅ ${res.message}`);
+      await checkHealthAndPing();
+    } catch (err: any) {
+      setSeedMsg(`❌ Seeding failed: ${err.message}`);
+    } finally {
+      setSeeding(false);
     }
   };
 
@@ -459,19 +477,28 @@ export const DevDiagnosticsView: React.FC<DevDiagnosticsViewProps> = ({
                 <span className="font-mono text-gray-300">{healthData?.timestamp || new Date().toISOString()}</span>
               </div>
 
-              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+              <div className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <button
                   onClick={handleReconnectDb}
                   disabled={reconnectingDb}
-                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-200 border border-emerald-800 text-xs font-semibold transition-all cursor-pointer disabled:opacity-50"
+                  className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-200 border border-emerald-800 text-xs font-semibold transition-all cursor-pointer disabled:opacity-50"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${reconnectingDb ? 'animate-spin' : ''}`} />
-                  <span>{reconnectingDb ? 'Testing DB Connection...' : 'Test DB Handshake'}</span>
+                  <span>{reconnectingDb ? 'Testing DB...' : 'Test DB Handshake'}</span>
+                </button>
+
+                <button
+                  onClick={handleSeedData}
+                  disabled={seeding}
+                  className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-indigo-950/80 hover:bg-indigo-900 text-indigo-200 border border-indigo-800 text-xs font-semibold transition-all cursor-pointer disabled:opacity-50"
+                >
+                  <Sparkles className={`w-3.5 h-3.5 ${seeding ? 'animate-spin' : 'text-indigo-400'}`} />
+                  <span>{seeding ? 'Seeding Data...' : 'Seed / Reset Data'}</span>
                 </button>
 
                 <button
                   onClick={checkHealthAndPing}
-                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 text-xs font-semibold transition-all cursor-pointer"
+                  className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700 text-xs font-semibold transition-all cursor-pointer"
                 >
                   <Activity className="w-3.5 h-3.5 text-blue-400" />
                   <span>Measure Latency</span>
@@ -481,6 +508,12 @@ export const DevDiagnosticsView: React.FC<DevDiagnosticsViewProps> = ({
               {dbReconnectMsg && (
                 <div className="p-2.5 rounded-lg bg-gray-800/90 border border-gray-700 text-gray-300 text-[11px] font-mono">
                   {dbReconnectMsg}
+                </div>
+              )}
+
+              {seedMsg && (
+                <div className="p-2.5 rounded-lg bg-indigo-950/80 border border-indigo-800 text-indigo-200 text-[11px] font-mono">
+                  {seedMsg}
                 </div>
               )}
             </div>

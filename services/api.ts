@@ -435,6 +435,14 @@ export const api = {
     return handleResponse<{ success: boolean; isConnected: boolean; message: string; error?: string }>(res);
   },
 
+  seedDatabase: async (): Promise<{ success: boolean; message: string; teachersCount: number; stats: DashboardStats }> => {
+    const res = await fetch(`${API_BASE}/system/seed`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+    });
+    return handleResponse<{ success: boolean; message: string; teachersCount: number; stats: DashboardStats }>(res);
+  },
+
   // Settings
   getSettings: async (): Promise<SystemSettings> => {
     const res = await fetch(`${API_BASE}/settings`, {
