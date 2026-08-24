@@ -327,6 +327,7 @@ export const api = {
     const res = await fetch(`${API_BASE}/devices/${id}/sync`, {
       method: 'POST',
       headers: getAuthHeaders(),
+      body: JSON.stringify({}),
     });
     return handleResponse<{ message: string; device: FingerprintDevice }>(res);
   },
@@ -431,6 +432,7 @@ export const api = {
     const res = await fetch(`${API_BASE}/system/reconnect-db`, {
       method: 'POST',
       headers: getAuthHeaders(),
+      body: JSON.stringify({}),
     });
     return handleResponse<{ success: boolean; isConnected: boolean; message: string; error?: string }>(res);
   },
@@ -439,6 +441,7 @@ export const api = {
     const res = await fetch(`${API_BASE}/system/seed`, {
       method: 'POST',
       headers: getAuthHeaders(),
+      body: JSON.stringify({}),
     });
     return handleResponse<{ success: boolean; message: string; teachersCount: number; stats: DashboardStats }>(res);
   },

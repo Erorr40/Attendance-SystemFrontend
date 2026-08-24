@@ -85,7 +85,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
         password: password.trim(),
       });
 
-      if (response.success && response.user) {
+      if (response.user && (response.success || response.token)) {
         onLoginSuccess(response.user, response.token);
       } else {
         setErrorMsg('Authentication failed. Please verify your credentials.');
