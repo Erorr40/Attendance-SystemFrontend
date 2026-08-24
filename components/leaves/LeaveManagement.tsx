@@ -14,6 +14,7 @@ import {
 import { LeaveRequest, Teacher, UserRole } from '../../types/index.ts';
 import { Badge } from '../common/Badge.tsx';
 import { Modal } from '../common/Modal.tsx';
+import { useToast } from '../common/Toast.tsx';
 import { api } from '../../services/api.ts';
 
 interface LeaveManagementProps {
@@ -31,6 +32,7 @@ export const LeaveManagement: React.FC<LeaveManagementProps> = ({
 }) => {
   const safeLeaves = Array.isArray(leaves) ? leaves : [];
   const safeTeachers = Array.isArray(teachers) ? teachers : [];
+  const { showToast } = useToast();
 
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
@@ -50,8 +52,7 @@ export const LeaveManagement: React.FC<LeaveManagementProps> = ({
   const [rejectionReason, setRejectionReason] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const canReview =
-    currentRole === 'hr_admin';
+  const canReview = currentRole === 'hr_admin';
 
   const filtered = safeLeaves.filter((l) => {
     const matchesSearch =
@@ -78,12 +79,7 @@ export const LeaveManagement: React.FC<LeaveManagementProps> = ({
 
     setIsSubmitting(true);
     try {
-      const reviewerName =
-        currentRole === 'hr_admin'
-          ? 'Dr. Mahmoud El-Sayed (Dept Head)'
-          : currentRole === 'hr_admin'
-          ? 'Mariam (HR Desk)'
-          : 'Super Admin';
+      const reviewerName = 'Mariam Soliman (HR Desk)';
 
       await api.reviewLeave({
         leaveId: selectedLeave.id,
@@ -93,9 +89,10 @@ export const LeaveManagement: React.FC<LeaveManagementProps> = ({
       });
 
       setIsReviewModalOpen(false);
+      showToast(`Leave request marked as ${reviewAction}`, reviewAction === 'Approved' ? 'success' : 'info');
       onRefreshLeaves();
-    } catch (err) {
-      // error handling
+    } catch (err: any) {
+      showToast(err.message || 'Failed to review leave request', 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -116,10 +113,11 @@ export const LeaveManagement: React.FC<LeaveManagementProps> = ({
       });
 
       setIsAddModalOpen(false);
+      showToast('Leave request submitted successfully', 'success');
       onRefreshLeaves();
       setReason('');
-    } catch (err) {
-      // error handling
+    } catch (err: any) {
+      showToast(err.message || 'Failed to submit leave request', 'error');
     } finally {
       setIsSubmitting(false);
     }

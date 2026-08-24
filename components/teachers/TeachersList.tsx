@@ -24,6 +24,7 @@ import {
 import { Teacher, Department, Schedule, FingerprintDevice, UserRole } from '../../types/index.ts';
 import { Badge } from '../common/Badge.tsx';
 import { Pagination } from '../common/Pagination.tsx';
+import { useToast } from '../common/Toast.tsx';
 import { api } from '../../services/api.ts';
 
 interface TeachersListProps {
@@ -58,6 +59,7 @@ export const TeachersList: React.FC<TeachersListProps> = ({
   const safeTeachers = Array.isArray(teachers) ? teachers : [];
   const safeDepts = Array.isArray(departments) ? departments : [];
 
+  const { showToast } = useToast();
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedDept, setSelectedDept] = useState<string>('ALL');
   const [selectedFingerprint, setSelectedFingerprint] = useState<string>('ALL');
@@ -93,9 +95,10 @@ export const TeachersList: React.FC<TeachersListProps> = ({
 
       if (res.success && res.plainPassword) {
         setRevealedPasswords((prev) => ({ ...prev, [teacher.id]: res.plainPassword }));
+        showToast(`Password revealed for ${teacher.fullName}`, 'info');
       }
     } catch (err: any) {
-      alert(err.message || 'Failed to reveal password');
+      showToast(err.message || 'Failed to reveal password', 'error');
     } finally {
       setLoadingPasswords((prev) => ({ ...prev, [teacher.id]: false }));
     }
@@ -105,6 +108,7 @@ export const TeachersList: React.FC<TeachersListProps> = ({
     if (currentRole !== 'hr_admin') return;
     navigator.clipboard.writeText(pass);
     setCopiedPassId(teacherId);
+    showToast('Password copied to clipboard', 'success');
     setTimeout(() => setCopiedPassId(null), 2000);
   };
 
@@ -125,10 +129,11 @@ export const TeachersList: React.FC<TeachersListProps> = ({
           setRevealedPasswords((prev) => ({ ...prev, [teacher.id]: res.plainPassword }));
         }
         setFeedbackMsg({ id: teacher.id, text: res.message });
+        showToast(`Password reset successfully for ${teacher.fullName}`, 'success');
         setTimeout(() => setFeedbackMsg(null), 5000);
       }
     } catch (err: any) {
-      alert(err.message || 'Failed to reset password');
+      showToast(err.message || 'Failed to reset password', 'error');
     }
   };
 

@@ -140,7 +140,12 @@ export const ScheduleManagement: React.FC<ScheduleManagementProps> = ({
                           : day === 'Wed'
                           ? 'Wednesday'
                           : 'Thursday';
-                      const isActive = s.workingDays.includes(fullDay);
+                      const activeDays = Array.isArray(s.workingDays)
+                        ? s.workingDays
+                        : Array.isArray((s as any).workDays)
+                        ? (s as any).workDays
+                        : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
+                      const isActive = activeDays.includes(fullDay);
 
                       return (
                         <span

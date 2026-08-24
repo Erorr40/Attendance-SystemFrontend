@@ -48,9 +48,9 @@ export const Header: React.FC<HeaderProps> = ({
   const userName = isEmployee
     ? 'Eng. Ahmed Hassan'
     : isBoard
-    ? 'Eng. Ahmed Rafat'
+    ? 'Eng. Ahmed Raafat'
     : isHR
-    ? 'Mariam (HR Desk)'
+    ? 'Mariam Soliman (HR Desk)'
     : 'Admin';
 
   const userTitle = isEmployee

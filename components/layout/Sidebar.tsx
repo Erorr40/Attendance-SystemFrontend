@@ -254,7 +254,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {isEmployee
                   ? 'Eng. Ahmed Hassan'
                   : isBoard
-                  ? 'Eng. Ahmed Rafat (Board)'
+                  ? 'Eng. Ahmed Raafat (Board)'
                   : 'Mariam Soliman (HR)'}
               </p>
               <p className="text-[10px] text-gray-500 dark:text-gray-400 capitalize truncate">

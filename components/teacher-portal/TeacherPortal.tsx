@@ -31,6 +31,7 @@ import {
 import { Teacher, AttendanceRecord, LeaveRequest, Schedule } from '../../types/index.ts';
 import { Badge } from '../common/Badge.tsx';
 import { Modal } from '../common/Modal.tsx';
+import { useToast } from '../common/Toast.tsx';
 import { api } from '../../services/api.ts';
 
 interface TeacherPortalProps {
@@ -58,6 +59,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({
 }) => {
   const safeHistory = Array.isArray(historyRecords) ? historyRecords : [];
   const safeLeaves = Array.isArray(leaves) ? leaves : [];
+  const { showToast } = useToast();
 
   const [isAddLeaveOpen, setIsAddLeaveOpen] = useState<boolean>(false);
   const [leaveType, setLeaveType] = useState<any>('Sick Leave');
@@ -114,9 +116,9 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({
       const q = searchQuery.toLowerCase();
       result = result.filter(
         (r) =>
-          r.date.includes(q) ||
-          r.status.toLowerCase().includes(q) ||
-          (r.deviceName && r.deviceName.toLowerCase().includes(q))
+          r.date?.toLowerCase().includes(q) ||
+          r.status?.toLowerCase().includes(q) ||
+          r.deviceName?.toLowerCase().includes(q)
       );
     }
 
@@ -150,10 +152,11 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({
         reason: reason.trim(),
       });
       setIsAddLeaveOpen(false);
+      showToast('Leave request submitted successfully', 'success');
       setReason('');
       onRefreshData();
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      showToast(err.message || 'Failed to submit leave request', 'error');
     } finally {
       setIsSubmitting(false);
     }
