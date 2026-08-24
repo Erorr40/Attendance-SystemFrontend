@@ -13,8 +13,21 @@ import {
   User,
   AuthResponse,
 } from '../types/index.ts';
+function resolveApiBase(): string {
+  let url = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000/api';
+  if (
+    typeof window !== 'undefined' &&
+    window.location.protocol === 'https:' &&
+    url.startsWith('http://') &&
+    !url.includes('localhost') &&
+    !url.includes('127.0.0.1')
+  ) {
+    url = url.replace('http://', 'https://');
+  }
+  return url;
+}
 
-const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000/api';
+const API_BASE = resolveApiBase();
 
 function getAuthHeaders(): Record<string, string> {
   const token = localStorage.getItem('elswedy_auth_token');

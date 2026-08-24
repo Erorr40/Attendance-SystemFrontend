@@ -58,7 +58,15 @@ export const DevDiagnosticsView: React.FC<DevDiagnosticsViewProps> = ({
     user?: any;
   }>({ hasToken: false, valid: false });
 
-  const apiBase = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000/api';
+  const rawEnvApi = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000/api';
+  const apiBase =
+    typeof window !== 'undefined' &&
+    window.location.protocol === 'https:' &&
+    rawEnvApi.startsWith('http://') &&
+    !rawEnvApi.includes('localhost') &&
+    !rawEnvApi.includes('127.0.0.1')
+      ? rawEnvApi.replace('http://', 'https://')
+      : rawEnvApi;
   const rawBaseUrl = apiBase.replace(/\/+api\/?$/, '');
 
   // 1. Measure Ping & Fetch Health

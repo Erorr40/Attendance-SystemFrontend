@@ -223,7 +223,16 @@ function MainAppContent() {
 
   // Real-time SSE Connection
   useEffect(() => {
-    const apiBase = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000/api';
+    let apiBase = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000/api';
+    if (
+      typeof window !== 'undefined' &&
+      window.location.protocol === 'https:' &&
+      apiBase.startsWith('http://') &&
+      !apiBase.includes('localhost') &&
+      !apiBase.includes('127.0.0.1')
+    ) {
+      apiBase = apiBase.replace('http://', 'https://');
+    }
     const sseUrl = `${apiBase.replace(/\/+api\/?$/, '')}/api/stream`;
 
     let eventSource: EventSource | null = null;
