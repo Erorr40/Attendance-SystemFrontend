@@ -218,8 +218,12 @@ function MainAppContent() {
   };
 
   useEffect(() => {
-    fetchAllData();
-  }, []);
+    if (isAuthenticated) {
+      fetchAllData();
+    } else {
+      setIsInitialLoading(false);
+    }
+  }, [isAuthenticated]);
 
   // Real-time SSE Connection
   useEffect(() => {

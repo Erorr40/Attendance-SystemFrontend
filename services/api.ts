@@ -41,8 +41,8 @@ async function handleResponse<T>(res: globalThis.Response): Promise<T> {
     localStorage.removeItem('elswedy_auth_token');
     localStorage.removeItem('elswedy_role');
     localStorage.removeItem('elswedy_user');
-    window.location.reload();
-    throw new Error('Session expired. Please log in again.');
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || 'Session expired or unauthorized. Please log in.');
   }
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));

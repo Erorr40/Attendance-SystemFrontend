@@ -250,25 +250,25 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({
       {isOverview && (
         <div className="space-y-6">
           {/* Today's Status Banner */}
-          <div className="bg-gradient-to-r from-slate-900 via-[#1E293B] to-slate-900 text-white rounded-2xl p-6 border border-slate-800 shadow-sm relative overflow-hidden">
+          <div className="bg-white dark:bg-[#0C101C] text-[#263238] dark:text-white rounded-2xl p-6 border border-gray-200/80 dark:border-slate-800/80 shadow-2xs relative overflow-hidden transition-colors">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 relative z-10">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-red-600/20 border border-red-500/40 text-[#E5252A] flex items-center justify-center font-bold text-2xl shadow-inner shrink-0">
-                  <Fingerprint className="w-7 h-7 text-red-400 animate-pulse" />
+                <div className="w-14 h-14 rounded-2xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-900/60 text-[#E5252A] dark:text-red-400 flex items-center justify-center font-bold text-2xl shadow-2xs shrink-0">
+                  <Fingerprint className="w-7 h-7 text-[#E5252A] dark:text-red-400 animate-pulse" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2.5 flex-wrap">
-                    <h2 className="text-lg font-extrabold text-white">Today's Biometric Status</h2>
+                    <h2 className="text-lg font-extrabold text-[#263238] dark:text-white">Today's Biometric Status</h2>
                     {todayRecord ? (
                       <Badge status={todayRecord.status} size="md" />
                     ) : (
-                      <span className="text-xs px-2.5 py-1 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                      <span className="text-xs px-2.5 py-1 rounded-full font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-900/50">
                         Pending Arrival Scan
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-300 mt-1 flex items-center gap-2">
-                    <span>Shift: <strong>{schedule?.name || 'Technical Faculty Shift'}</strong> ({schedule?.startTime || '07:30 AM'} - {schedule?.endTime || '03:30 PM'})</span>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-2 flex-wrap">
+                    <span>Shift: <strong className="text-[#263238] dark:text-white">{schedule?.name || 'Technical Faculty Shift'}</strong> ({schedule?.startTime || '07:30 AM'} - {schedule?.endTime || '03:30 PM'})</span>
                     <span>•</span>
                     <span>Grace Period: {schedule?.gracePeriodMinutes || 15} min</span>
                   </p>
@@ -278,7 +278,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({
               <div className="flex items-center gap-3">
                 <button
                   onClick={onOpenLiveScanner}
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#B30F13] to-[#E5252A] hover:brightness-110 text-white text-xs font-bold shadow-md shadow-red-900/40 transition-all cursor-pointer"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#B30F13] to-[#E5252A] hover:brightness-110 text-white text-xs font-bold shadow-md shadow-red-500/20 transition-all cursor-pointer"
                 >
                   <Fingerprint className="w-4 h-4" />
                   <span>Simulate Gate Scan</span>
@@ -287,41 +287,41 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({
             </div>
 
             {/* Check-In / Check-Out Quick Glance */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 pt-5 border-t border-slate-700/60 text-xs">
-              <div className="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/50">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">Check-In Time</span>
-                <p className="text-lg font-mono font-extrabold text-white">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6 pt-5 border-t border-gray-100 dark:border-slate-800 text-xs">
+              <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-slate-900/60 border border-gray-100 dark:border-slate-800">
+                <span className="text-[10px] uppercase font-bold text-gray-400 dark:text-gray-500 block mb-1">Check-In Time</span>
+                <p className="text-lg font-mono font-extrabold text-[#263238] dark:text-white">
                   {todayRecord?.checkInTime || '--:-- --'}
                 </p>
-                <p className="text-[11px] text-slate-400 mt-0.5">{todayRecord?.deviceName || 'Main Campus Turnstile'}</p>
+                <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">{todayRecord?.deviceName || 'Main Campus Turnstile'}</p>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/50">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">Check-Out Time</span>
-                <p className="text-lg font-mono font-extrabold text-white">
+              <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-slate-900/60 border border-gray-100 dark:border-slate-800">
+                <span className="text-[10px] uppercase font-bold text-gray-400 dark:text-gray-500 block mb-1">Check-Out Time</span>
+                <p className="text-lg font-mono font-extrabold text-[#263238] dark:text-white">
                   {todayRecord?.checkOutTime || '--:-- --'}
                 </p>
-                <p className="text-[11px] text-slate-400 mt-0.5">
+                <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
                   {todayRecord?.checkOutTime ? 'Logged' : 'Expected: ' + (schedule?.endTime || '03:30 PM')}
                 </p>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/50 flex flex-col justify-between">
-                <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">Punctuality Score</span>
+              <div className="p-3.5 rounded-xl bg-gray-50 dark:bg-slate-900/60 border border-gray-100 dark:border-slate-800 flex flex-col justify-between">
+                <span className="text-[10px] uppercase font-bold text-gray-400 dark:text-gray-500 block mb-1">Punctuality Score</span>
                 {todayRecord?.status === 'Present' && (
-                  <p className="text-xs font-bold text-emerald-400 flex items-center gap-1">
+                  <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                     <CheckCircle className="w-3.5 h-3.5" /> On Time Arrival
                   </p>
                 )}
                 {todayRecord?.status === 'Late' && (
-                  <p className="text-xs font-bold text-amber-400 flex items-center gap-1">
+                  <p className="text-xs font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1">
                     <AlertTriangle className="w-3.5 h-3.5" /> Late (+{todayRecord.lateDurationMinutes}m)
                   </p>
                 )}
                 {!todayRecord && (
-                  <p className="text-xs font-semibold text-slate-300">Scan turnstile to check in</p>
+                  <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">Scan turnstile to check in</p>
                 )}
-                <span className="text-[10px] text-slate-400 mt-1">Elswedy Biometric Gate #01</span>
+                <span className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">Elswedy Biometric Gate #01</span>
               </div>
             </div>
           </div>

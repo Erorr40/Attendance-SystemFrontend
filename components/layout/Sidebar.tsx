@@ -55,6 +55,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if (typeof setCurrentRole === 'function') setCurrentRole(role);
     else if (typeof onRoleChange === 'function') onRoleChange(role);
   };
+
   // Navigation lists tailored per role (3 primary roles: HR, Board, Employee)
   const isEmployee = currentRole === 'employee' || currentRole === 'teacher';
   const isBoard = currentRole === 'board';
@@ -88,9 +89,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const navItems = isEmployee ? employeeNavItems : adminNavItems;
 
   return (
-    <aside className="w-64 bg-white dark:bg-[#0C101C] border-r border-gray-200/80 dark:border-slate-800/60 flex flex-col justify-between shrink-0 min-h-screen select-none relative z-20 transition-colors">
-      {/* Brand Header */}
-      <div>
+    <aside className="w-64 bg-white dark:bg-[#0C101C] border-r border-gray-200/80 dark:border-slate-800/60 flex flex-col shrink-0 h-screen sticky top-0 select-none z-20 transition-colors overflow-hidden">
+      {/* 1. Fixed Header Section */}
+      <div className="shrink-0">
         <div className="px-5 py-4 border-b border-gray-100 dark:border-slate-800/60 flex items-center justify-between group">
           <div
             onClick={onReplayIntro}
@@ -118,7 +119,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Live Scanner Quick Terminal Launch Button */}
-        <div className="p-3">
+        <div className="p-3 pb-1">
           <button
             onClick={onOpenLiveScanner}
             className="w-full relative overflow-hidden flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-[#B30F13] via-[#E5252A] to-[#E5252A] hover:brightness-110 text-white text-xs font-bold shadow-md shadow-red-500/20 transition-all cursor-pointer group"
@@ -137,88 +138,88 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </span>
           </button>
         </div>
-
-        {/* Navigation List */}
-        <div className="px-3 py-1 space-y-1">
-          <div className="px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
-            {isEmployee ? 'Employee Portal' : 'Main Menu'}
-          </div>
-
-          {navItems.map((item: any) => {
-            const Icon = item.icon;
-            const isActive = currentView === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setView(item.id)}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-gradient-to-r from-red-50 to-red-50/50 dark:from-red-950/40 dark:to-red-950/20 text-[#E5252A] dark:text-red-400 font-bold border border-red-200/80 dark:border-red-900/50 shadow-2xs'
-                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50/80 dark:hover:bg-slate-800/60 hover:text-[#263238] dark:hover:text-white'
-                }`}
-              >
-                <div className="flex items-center gap-2.5">
-                  <Icon
-                    className={`w-4 h-4 transition-transform group-hover:scale-110 ${
-                      isActive ? 'text-[#E5252A] dark:text-red-400' : 'text-gray-400 dark:text-gray-500'
-                    }`}
-                  />
-                  <span>{item.label}</span>
-                </div>
-
-                <div className="flex items-center gap-1.5">
-                  {item.badge && (
-                    <span className="text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-900/60">
-                      {item.badge}
-                    </span>
-                  )}
-                  {item.isLive && (
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                    </span>
-                  )}
-                  {isActive && <ChevronRight className="w-3.5 h-3.5 text-[#E5252A] dark:text-red-400" />}
-                </div>
-              </button>
-            );
-          })}
-
-          {!isEmployee && adminExtraItems.length > 0 && (
-            <>
-              <div className="pt-3 px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
-                System Administration
-              </div>
-              {adminExtraItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = currentView === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => setView(item.id)}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer ${
-                      isActive
-                        ? 'bg-gradient-to-r from-red-50 to-red-50/50 dark:from-red-950/40 dark:to-red-950/20 text-[#E5252A] dark:text-red-400 font-bold border border-red-200/80 dark:border-red-900/50 shadow-2xs'
-                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50/80 dark:hover:bg-slate-800/60 hover:text-[#263238] dark:hover:text-white'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <Icon
-                        className={`w-4 h-4 ${isActive ? 'text-[#E5252A] dark:text-red-400' : 'text-gray-400 dark:text-gray-500'}`}
-                      />
-                      <span>{item.label}</span>
-                    </div>
-                    {isActive && <ChevronRight className="w-3.5 h-3.5 text-[#E5252A] dark:text-red-400" />}
-                  </button>
-                );
-              })}
-            </>
-          )}
-        </div>
       </div>
 
-      {/* Role Switcher & User Footer */}
-      <div className="p-3 border-t border-gray-100 dark:border-slate-800/60 bg-gray-50/60 dark:bg-[#080B14]">
+      {/* 2. Scrollable Middle Navigation Menu */}
+      <div className="flex-1 overflow-y-auto min-h-0 px-3 py-2 space-y-1">
+        <div className="px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+          {isEmployee ? 'Employee Portal' : 'Main Menu'}
+        </div>
+
+        {navItems.map((item: any) => {
+          const Icon = item.icon;
+          const isActive = currentView === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => setView(item.id)}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer ${
+                isActive
+                  ? 'bg-gradient-to-r from-red-50 to-red-50/50 dark:from-red-950/40 dark:to-red-950/20 text-[#E5252A] dark:text-red-400 font-bold border border-red-200/80 dark:border-red-900/50 shadow-2xs'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50/80 dark:hover:bg-slate-800/60 hover:text-[#263238] dark:hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <Icon
+                  className={`w-4 h-4 transition-transform group-hover:scale-110 ${
+                    isActive ? 'text-[#E5252A] dark:text-red-400' : 'text-gray-400 dark:text-gray-500'
+                  }`}
+                />
+                <span>{item.label}</span>
+              </div>
+
+              <div className="flex items-center gap-1.5">
+                {item.badge && (
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-900/60">
+                    {item.badge}
+                  </span>
+                )}
+                {item.isLive && (
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                  </span>
+                )}
+                {isActive && <ChevronRight className="w-3.5 h-3.5 text-[#E5252A] dark:text-red-400" />}
+              </div>
+            </button>
+          );
+        })}
+
+        {!isEmployee && adminExtraItems.length > 0 && (
+          <>
+            <div className="pt-3 px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+              System Administration
+            </div>
+            {adminExtraItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = currentView === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setView(item.id)}
+                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer ${
+                    isActive
+                      ? 'bg-gradient-to-r from-red-50 to-red-50/50 dark:from-red-950/40 dark:to-red-950/20 text-[#E5252A] dark:text-red-400 font-bold border border-red-200/80 dark:border-red-900/50 shadow-2xs'
+                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50/80 dark:hover:bg-slate-800/60 hover:text-[#263238] dark:hover:text-white'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Icon
+                      className={`w-4 h-4 ${isActive ? 'text-[#E5252A] dark:text-red-400' : 'text-gray-400 dark:text-gray-500'}`}
+                    />
+                    <span>{item.label}</span>
+                  </div>
+                  {isActive && <ChevronRight className="w-3.5 h-3.5 text-[#E5252A] dark:text-red-400" />}
+                </button>
+              );
+            })}
+          </>
+        )}
+      </div>
+
+      {/* 3. Firmly Pinned Bottom Footer Section (Never moves, never jumps) */}
+      <div className="shrink-0 p-3 border-t border-gray-100 dark:border-slate-800/60 bg-gray-50/80 dark:bg-[#080B14]">
         <div className="mb-2.5">
           <label className="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">
             Active Role (Demo Switcher)
@@ -282,4 +283,3 @@ export const Sidebar: React.FC<SidebarProps> = ({
     </aside>
   );
 };
-
