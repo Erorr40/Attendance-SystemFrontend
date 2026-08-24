@@ -85,6 +85,7 @@ function MainAppContent() {
 
   // Navigation & Role State
   const [currentView, setCurrentView] = useState<string>('dashboard');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [currentRole, setCurrentRole] = useState<UserRole>(() => {
     const saved = localStorage.getItem('elswedy_role');
     return (saved as UserRole) || 'hr_admin';
@@ -477,6 +478,8 @@ function MainAppContent() {
                 onReplayIntro={() => setShowSplash(true)}
                 isDarkMode={isDarkMode}
                 onLogout={handleLogout}
+                isMobileOpen={isMobileMenuOpen}
+                onCloseMobile={() => setIsMobileMenuOpen(false)}
               />
 
               {/* Main Content Area */}
@@ -492,6 +495,7 @@ function MainAppContent() {
                   }
                   isDarkMode={isDarkMode}
                   onToggleDarkMode={setIsDarkMode}
+                  onToggleMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
                 />
 
                 {/* Page Body View Router with Motion Transitions */}

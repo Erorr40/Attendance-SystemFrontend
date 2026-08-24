@@ -17,7 +17,9 @@ import {
   Sparkles,
   Play,
   Terminal,
+  X,
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { UserRole } from '../../types/index.ts';
 import { ElsewedyLogo } from '../common/ElsewedyLogo.tsx';
 
@@ -32,6 +34,8 @@ interface SidebarProps {
   onReplayIntro?: () => void;
   isDarkMode?: boolean;
   onLogout?: () => void;
+  isMobileOpen?: boolean;
+  onCloseMobile?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -45,10 +49,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onReplayIntro,
   isDarkMode = false,
   onLogout,
+  isMobileOpen = false,
+  onCloseMobile = () => {},
 }) => {
   const setView = (view: string) => {
     if (typeof setCurrentView === 'function') setCurrentView(view);
     else if (typeof onSelectView === 'function') onSelectView(view);
+    if (onCloseMobile) onCloseMobile();
   };
 
   const setRole = (role: UserRole) => {
@@ -88,13 +95,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const navItems = isEmployee ? employeeNavItems : adminNavItems;
 
-  return (
-    <aside className="w-64 bg-white dark:bg-[#0C101C] border-r border-gray-200/80 dark:border-slate-800/60 flex flex-col shrink-0 h-screen sticky top-0 select-none z-20 transition-colors overflow-hidden">
-      {/* 1. Fixed Header Section */}
+  const sidebarContent = (isMobile: boolean = false) => (
+    <div className="flex flex-col h-full justify-between select-none">
+      {/* 1. Top Header Section */}
       <div className="shrink-0">
-        <div className="px-5 py-4 border-b border-gray-100 dark:border-slate-800/60 flex items-center justify-between group">
+        <div className="px-4 sm:px-5 py-4 border-b border-gray-100 dark:border-slate-800/60 flex items-center justify-between group">
           <div
-            onClick={onReplayIntro}
+            onClick={() => {
+              if (onReplayIntro) onReplayIntro();
+              if (isMobile && onCloseMobile) onCloseMobile();
+            }}
             className="cursor-pointer transition-transform hover:scale-[1.02]"
             title="Click to replay Elsewedy animated intro"
           >
@@ -107,24 +117,38 @@ export const Sidebar: React.FC<SidebarProps> = ({
             />
           </div>
 
-          {onReplayIntro && (
-            <button
-              onClick={onReplayIntro}
-              title="Replay Elsewedy Intro Animation"
-              className="p-1.5 rounded-lg text-gray-400 hover:text-[#E5252A] hover:bg-red-50 dark:hover:bg-slate-800/80 transition-all cursor-pointer"
-            >
-              <Play className="w-3.5 h-3.5 fill-current" />
-            </button>
-          )}
+          <div className="flex items-center gap-1">
+            {onReplayIntro && (
+              <button
+                onClick={onReplayIntro}
+                title="Replay Elsewedy Intro Animation"
+                className="p-1.5 rounded-lg text-gray-400 hover:text-[#E5252A] hover:bg-red-50 dark:hover:bg-slate-800/80 transition-all cursor-pointer"
+              >
+                <Play className="w-3.5 h-3.5 fill-current" />
+              </button>
+            )}
+
+            {isMobile && (
+              <button
+                onClick={onCloseMobile}
+                title="Close Navigation Menu"
+                className="p-1.5 rounded-lg text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Live Scanner Quick Terminal Launch Button */}
         <div className="p-3 pb-1">
           <button
-            onClick={onOpenLiveScanner}
+            onClick={() => {
+              onOpenLiveScanner();
+              if (isMobile && onCloseMobile) onCloseMobile();
+            }}
             className="w-full relative overflow-hidden flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-[#B30F13] via-[#E5252A] to-[#E5252A] hover:brightness-110 text-white text-xs font-bold shadow-md shadow-red-500/20 transition-all cursor-pointer group"
           >
-            {/* Shimmer sweep */}
             <div className="absolute inset-0 bg-white/10 skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none" />
 
             <div className="flex items-center gap-2">
@@ -140,7 +164,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
 
-      {/* 2. Scrollable Middle Navigation Menu */}
+      {/* 2. Middle Scrollable Nav Menu */}
       <div className="flex-1 overflow-y-auto min-h-0 px-3 py-2 space-y-1">
         <div className="px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
           {isEmployee ? 'Employee Portal' : 'Main Menu'}
@@ -153,7 +177,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <button
               key={item.id}
               onClick={() => setView(item.id)}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer ${
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                 isActive
                   ? 'bg-gradient-to-r from-red-50 to-red-50/50 dark:from-red-950/40 dark:to-red-950/20 text-[#E5252A] dark:text-red-400 font-bold border border-red-200/80 dark:border-red-900/50 shadow-2xs'
                   : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50/80 dark:hover:bg-slate-800/60 hover:text-[#263238] dark:hover:text-white'
@@ -198,7 +222,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <button
                   key={item.id}
                   onClick={() => setView(item.id)}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer ${
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                     isActive
                       ? 'bg-gradient-to-r from-red-50 to-red-50/50 dark:from-red-950/40 dark:to-red-950/20 text-[#E5252A] dark:text-red-400 font-bold border border-red-200/80 dark:border-red-900/50 shadow-2xs'
                       : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50/80 dark:hover:bg-slate-800/60 hover:text-[#263238] dark:hover:text-white'
@@ -218,7 +242,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         )}
       </div>
 
-      {/* 3. Firmly Pinned Bottom Footer Section (Never moves, never jumps) */}
+      {/* 3. Pinned Bottom Footer Section */}
       <div className="shrink-0 p-3 border-t border-gray-100 dark:border-slate-800/60 bg-gray-50/80 dark:bg-[#080B14]">
         <div className="mb-2.5">
           <label className="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">
@@ -273,6 +297,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 setRole('hr_admin');
                 setView('dashboard');
               }
+              if (isMobile && onCloseMobile) onCloseMobile();
             }}
             className="p-1.5 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
           >
@@ -280,6 +305,42 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </button>
         </div>
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop Persistent Sidebar */}
+      <aside className="hidden md:flex w-64 bg-white dark:bg-[#0C101C] border-r border-gray-200/80 dark:border-slate-800/60 flex-col shrink-0 h-screen sticky top-0 z-20 transition-colors overflow-hidden">
+        {sidebarContent(false)}
+      </aside>
+
+      {/* Mobile Off-Canvas Drawer */}
+      <AnimatePresence>
+        {isMobileOpen && (
+          <>
+            {/* Backdrop Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={onCloseMobile}
+              className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 md:hidden"
+            />
+
+            {/* Sliding Drawer */}
+            <motion.aside
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+              className="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-white dark:bg-[#0C101C] border-r border-gray-200 dark:border-slate-800 flex flex-col h-full shadow-2xl md:hidden overflow-hidden"
+            >
+              {sidebarContent(true)}
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 };

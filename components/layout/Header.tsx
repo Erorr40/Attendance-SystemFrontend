@@ -13,6 +13,7 @@ import {
   Sparkles,
   Moon,
   Sun,
+  Menu,
 } from 'lucide-react';
 import { NotificationItem, UserRole } from '../../types/index.ts';
 
@@ -26,6 +27,7 @@ interface HeaderProps {
   onReplayIntro?: () => void;
   isDarkMode?: boolean;
   onToggleDarkMode?: (enabled: boolean) => void;
+  onToggleMobileMenu?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -37,6 +39,7 @@ export const Header: React.FC<HeaderProps> = ({
   onReplayIntro,
   isDarkMode = false,
   onToggleDarkMode,
+  onToggleMobileMenu,
 }) => {
   const safeNotifs = Array.isArray(notifications) ? notifications : [];
   const [showNotifications, setShowNotifications] = useState(false);
@@ -50,21 +53,20 @@ export const Header: React.FC<HeaderProps> = ({
     : isBoard
     ? 'Eng. Ahmed Raafat'
     : isHR
-    ? 'Mariam Soliman (HR Desk)'
+    ? 'Mariam Soliman (HR)'
     : 'Admin';
 
   const userTitle = isEmployee
     ? 'Faculty / Employee'
     : isBoard
-    ? 'Board Executive Observer'
+    ? 'Board Executive'
     : isHR
     ? 'HR Administrator'
-    : 'System Administrator';
+    : 'System Admin';
 
-  // Format date: e.g. "Tuesday, August 18, 2026" or "Thursday, August 20, 2026"
   const formattedDate = new Intl.DateTimeFormat('en-US', {
-    weekday: 'long',
-    month: 'long',
+    weekday: 'short',
+    month: 'short',
     day: 'numeric',
     year: 'numeric',
   }).format(new Date());
@@ -72,27 +74,38 @@ export const Header: React.FC<HeaderProps> = ({
   const unreadCount = safeNotifs.filter((n) => !n.isRead).length;
 
   return (
-    <header className="bg-white dark:bg-[#0C101C] border-b border-gray-200/80 dark:border-slate-800/60 px-4 sm:px-6 py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 sticky top-0 z-30 shadow-2xs transition-colors">
-      {/* Greeting and Context */}
-      <div className="flex flex-wrap items-center justify-between md:justify-start gap-3">
+    <header className="bg-white dark:bg-[#0C101C] border-b border-gray-200/80 dark:border-slate-800/60 px-3 sm:px-6 py-3 flex flex-col md:flex-row md:items-center justify-between gap-3 sticky top-0 z-30 shadow-2xs transition-colors">
+      {/* Left: Mobile Menu Trigger + Greeting Context */}
+      <div className="flex items-center justify-between md:justify-start gap-2.5 sm:gap-3 flex-wrap">
+        {/* Hamburger Menu on Mobile */}
+        {onToggleMobileMenu && (
+          <button
+            onClick={onToggleMobileMenu}
+            title="Toggle Navigation Menu"
+            className="md:hidden p-2 rounded-xl border border-gray-200/80 dark:border-slate-800 bg-gray-50 dark:bg-slate-900 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors cursor-pointer shadow-2xs shrink-0"
+          >
+            <Menu className="w-5 h-5 text-[#E5252A]" />
+          </button>
+        )}
+
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="text-lg sm:text-xl font-extrabold text-[#263238] dark:text-white">
+            <h1 className="text-base sm:text-xl font-extrabold text-[#263238] dark:text-white leading-tight">
               Hi, <span className="text-[#E5252A] dark:text-red-400">{userName}</span>
             </h1>
-            <span className="text-[11px] px-2.5 py-0.5 rounded-full font-bold bg-red-50 dark:bg-red-950/60 text-[#E5252A] dark:text-red-300 border border-red-200/60 dark:border-red-900/50 shadow-2xs">
+            <span className="text-[10px] sm:text-[11px] px-2 py-0.5 rounded-full font-bold bg-red-50 dark:bg-red-950/60 text-[#E5252A] dark:text-red-300 border border-red-200/60 dark:border-red-900/50 shadow-2xs">
               {userTitle}
             </span>
           </div>
-          <div className="flex items-center gap-2 mt-0.5 text-xs text-gray-500 dark:text-gray-400 flex-wrap">
-            <span className="font-medium">
+          <div className="flex items-center gap-2 mt-0.5 text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 flex-wrap">
+            <span className="font-medium hidden sm:inline">
               {isEmployee
                 ? 'Faculty Biometric Portal'
                 : isBoard
                 ? 'Departmental Attendance Overview'
                 : 'Teacher Attendance System'}
             </span>
-            <span>•</span>
+            <span className="hidden sm:inline">•</span>
             <span className="flex items-center gap-1 font-medium text-gray-600 dark:text-gray-300">
               <Calendar className="w-3.5 h-3.5 text-gray-400 dark:text-gray-500" />
               {formattedDate}
@@ -101,13 +114,13 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* Right Controls: Role Switcher, Dark/Light Mode, Device Status, Notifications, Live Scanner Terminal */}
-      <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
-        {/* Dark Mode / White Mode Direct Toggle Button */}
+      {/* Right Controls: Role Switcher, Dark/Light Mode, Notifications, Live Scanner Terminal */}
+      <div className="flex items-center gap-1.5 sm:gap-2.5 flex-wrap justify-end">
+        {/* Dark Mode / Light Mode Direct Toggle Button */}
         {onToggleDarkMode && (
           <button
             onClick={() => onToggleDarkMode(!isDarkMode)}
-            title={isDarkMode ? 'Switch to Light / White Mode' : 'Switch to Dark Mode'}
+            title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             className="flex items-center gap-1.5 p-2 sm:px-3 sm:py-1.5 rounded-xl border border-gray-200/90 dark:border-slate-800 bg-gray-50 dark:bg-slate-900 hover:bg-gray-100 dark:hover:bg-slate-800 text-[#263238] dark:text-gray-200 transition-colors cursor-pointer shadow-2xs text-xs font-semibold"
           >
             {isDarkMode ? (
@@ -125,19 +138,19 @@ export const Header: React.FC<HeaderProps> = ({
         )}
 
         {/* Role Quick Selector in Header */}
-        <div className="flex items-center gap-1.5 bg-gray-50 dark:bg-slate-900 border border-gray-200/80 dark:border-slate-800 rounded-xl p-1 shadow-2xs">
-          <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-1.5 hidden sm:inline">
+        <div className="flex items-center gap-1 bg-gray-50 dark:bg-slate-900 border border-gray-200/80 dark:border-slate-800 rounded-xl p-1 shadow-2xs">
+          <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-1 hidden md:inline">
             Role:
           </span>
           <select
             value={currentRole}
             onChange={(e) => onRoleChange(e.target.value as UserRole)}
-            className="text-xs font-bold bg-white dark:bg-slate-900 text-[#263238] dark:text-white border border-gray-200 dark:border-slate-800 rounded-lg px-2.5 py-1.5 shadow-2xs focus:outline-hidden focus:border-[#E5252A] cursor-pointer"
+            className="text-xs font-bold bg-white dark:bg-slate-900 text-[#263238] dark:text-white border border-gray-200 dark:border-slate-800 rounded-lg px-2 py-1 shadow-2xs focus:outline-hidden focus:border-[#E5252A] cursor-pointer max-w-[140px] sm:max-w-none truncate"
             title="Switch User Role / Viewpoint"
           >
-            <option value="hr_admin">📋 HR (Full Access)</option>
+            <option value="hr_admin">📋 HR Admin</option>
             <option value="board">🏛️ Board (Read-Only)</option>
-            <option value="employee">👨‍🏫 Employee Portal</option>
+            <option value="employee">👨‍🏫 Faculty Portal</option>
           </select>
         </div>
 
@@ -195,7 +208,7 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200/80 dark:border-gray-700 py-2 z-50 animate-in fade-in zoom-in-95">
+            <div className="absolute right-0 mt-2 w-72 sm:w-96 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200/80 dark:border-gray-700 py-2 z-50 animate-in fade-in zoom-in-95">
               <div className="px-4 py-2.5 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
                 <span className="text-xs font-bold text-[#263238] dark:text-white uppercase tracking-wider flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-[#E5252A]" />
@@ -208,7 +221,7 @@ export const Header: React.FC<HeaderProps> = ({
 
               <div className="max-h-80 overflow-y-auto divide-y divide-gray-50 dark:divide-gray-700">
                 {safeNotifs.length === 0 ? (
-                  <div className="py-8 text-center text-xs text-gray-400 dark:text-gray-500 dark:text-gray-400">
+                  <div className="py-8 text-center text-xs text-gray-400 dark:text-gray-500">
                     No new notifications
                   </div>
                 ) : (
@@ -234,7 +247,7 @@ export const Header: React.FC<HeaderProps> = ({
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-semibold text-[#263238] dark:text-white">{n.title}</p>
                         <p className="text-xs text-gray-600 dark:text-gray-300 mt-0.5 leading-relaxed">{n.message}</p>
-                        <span className="text-[10px] text-gray-400 dark:text-gray-500 dark:text-gray-400 mt-1 block flex items-center gap-1">
+                        <span className="text-[10px] text-gray-400 dark:text-gray-500 mt-1 block flex items-center gap-1">
                           <Clock className="w-3 h-3" />
                           {new Date(n.timestamp).toLocaleTimeString([], {
                             hour: '2-digit',
