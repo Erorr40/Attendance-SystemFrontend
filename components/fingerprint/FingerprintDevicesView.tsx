@@ -20,7 +20,6 @@ import { api } from '../../services/api.ts';
 interface FingerprintDevicesViewProps {
   devices: FingerprintDevice[];
   currentRole: UserRole;
-  onOpenLiveScanner?: () => void;
   onRefreshDevices: () => void;
 }
 

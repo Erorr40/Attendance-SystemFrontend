@@ -14,7 +14,6 @@ import { AuditLogsView } from './components/audit/AuditLogsView.tsx';
 import { SystemSettingsView } from './components/settings/SystemSettingsView.tsx';
 import { TeacherPortal } from './components/teacher-portal/TeacherPortal.tsx';
 import { LoginView } from './components/auth/LoginView.tsx';
-import { FingerprintScannerModal } from './components/fingerprint/FingerprintScannerModal.tsx';
 import { RegisterBiometricWizard } from './components/fingerprint/RegisterBiometricWizard.tsx';
 import { AddTeacherModal } from './components/teachers/AddTeacherModal.tsx';
 import { EditTeacherModal } from './components/teachers/EditTeacherModal.tsx';
@@ -180,7 +179,6 @@ function MainAppContent() {
   const [allAttendanceRecords, setAllAttendanceRecords] = useState<AttendanceRecord[]>([]);
 
   // Modals State
-  const [isScannerOpen, setIsScannerOpen] = useState<boolean>(false);
   const [enrollingTeacher, setEnrollingTeacher] = useState<Teacher | null>(null);
   const [isAddTeacherOpen, setIsAddTeacherOpen] = useState<boolean>(false);
   const [editingTeacher, setEditingTeacher] = useState<Teacher | null>(null);
@@ -365,15 +363,6 @@ function MainAppContent() {
     }
   };
 
-  const handleScanSuccess = (data: { record: AttendanceRecord; event: AttendanceEvent }) => {
-    api.getDashboard().then((res) => {
-      if (res.stats) setStats(res.stats);
-      if (res.todayAttendance) setTodayRecords(res.todayAttendance);
-      if (res.liveEvents) setEvents(res.liveEvents);
-    });
-    showToast(`Verification verified for ${data.record.teacherName}`, 'success');
-  };
-
   const handleToggleAccountStatus = async (teacherId: string) => {
     try {
       const res = await api.toggleTeacherStatus(teacherId, 'HR Admin');
@@ -485,8 +474,6 @@ function MainAppContent() {
                 setCurrentView={setCurrentView}
                 onSelectView={setCurrentView}
                 currentRole={currentRole}
-                setCurrentRole={handleRoleChange}
-                onRoleChange={handleRoleChange}
                 onReplayIntro={() => setShowSplash(true)}
                 isDarkMode={isDarkMode}
                 onLogout={handleLogout}
@@ -499,9 +486,7 @@ function MainAppContent() {
                 {/* Header with quick dark/light toggle and notifications */}
                 <Header
                   currentRole={currentRole}
-                  onRoleChange={handleRoleChange}
                   notifications={notifications}
-                  onOpenLiveScanner={() => setIsScannerOpen(true)}
                   onMarkNotificationsRead={() =>
                     setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })))
                   }
@@ -573,7 +558,6 @@ function MainAppContent() {
                         <FingerprintDevicesView
                           devices={devices}
                           currentRole={currentRole}
-                          onOpenLiveScanner={() => setIsScannerOpen(true)}
                           onRefreshDevices={() => {
                             api.getDevices().then(setDevices);
                           }}
@@ -642,7 +626,6 @@ function MainAppContent() {
                             schedule={teacherSchedule}
                             currentView={currentView}
                             onSelectView={setCurrentView}
-                            onOpenLiveScanner={() => setIsScannerOpen(true)}
                             onRefreshData={fetchAllData}
                           />
                         )}
@@ -653,14 +636,6 @@ function MainAppContent() {
             </div>
 
             {/* Global Modals */}
-            <FingerprintScannerModal
-              isOpen={isScannerOpen}
-              onClose={() => setIsScannerOpen(false)}
-              teachers={teachers}
-              devices={devices}
-              onScanSuccess={handleScanSuccess}
-            />
-
             <RegisterBiometricWizard
               isOpen={!!enrollingTeacher}
               onClose={() => setEnrollingTeacher(null)}

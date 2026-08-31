@@ -28,9 +28,6 @@ interface SidebarProps {
   setCurrentView?: (view: string) => void;
   onSelectView?: (view: string) => void;
   currentRole: UserRole;
-  setCurrentRole?: (role: UserRole) => void;
-  onRoleChange?: (role: UserRole) => void;
-  onOpenLiveScanner?: () => void;
   onReplayIntro?: () => void;
   isDarkMode?: boolean;
   onLogout?: () => void;
@@ -43,9 +40,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   setCurrentView,
   onSelectView,
   currentRole,
-  setCurrentRole,
-  onRoleChange,
-  onOpenLiveScanner = () => {},
   onReplayIntro,
   isDarkMode = false,
   onLogout,
@@ -56,11 +50,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     if (typeof setCurrentView === 'function') setCurrentView(view);
     else if (typeof onSelectView === 'function') onSelectView(view);
     if (onCloseMobile) onCloseMobile();
-  };
-
-  const setRole = (role: UserRole) => {
-    if (typeof setCurrentRole === 'function') setCurrentRole(role);
-    else if (typeof onRoleChange === 'function') onRoleChange(role);
   };
 
   // Navigation lists tailored per role (3 primary roles: HR, Board, Employee)
@@ -245,9 +234,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onClick={() => {
               if (onLogout) {
                 onLogout();
-              } else {
-                setRole('hr_admin');
-                setView('dashboard');
               }
               if (isMobile && onCloseMobile) onCloseMobile();
             }}
