@@ -1,8 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   User,
-  Camera,
-  Upload,
   Shield,
   KeyRound,
   Phone,
@@ -18,11 +16,11 @@ import {
   EyeOff,
   Save,
   RotateCcw,
-  Image as ImageIcon,
   Check,
   Zap,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { UserAvatar } from '../common/UserAvatar.tsx';
 import { User as UserType, UserRole, Teacher } from '../../types/index.ts';
 import { api } from '../../services/api.ts';
 
@@ -41,10 +39,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
 }) => {
   const [name, setName] = useState(currentUser.name || 'Eng. Ahmed Hassan');
   const [phone, setPhone] = useState(currentUser.phone || '+20 100 458 9123');
-  const [avatar, setAvatar] = useState(
-    currentUser.avatar ||
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
-  );
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -53,39 +47,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccessMsg, setSaveSuccessMsg] = useState<string | null>(null);
   const [saveErrorMsg, setSaveErrorMsg] = useState<string | null>(null);
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Preset institutional avatars for quick selection
-  const avatarPresets = [
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
-  ];
-
-  // Handle local photo upload
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (file.size > 5 * 1024 * 1024) {
-      setSaveErrorMsg('Photo size exceeds 5MB limit. Please choose a smaller image.');
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      if (typeof event.target?.result === 'string') {
-        setAvatar(event.target.result);
-        setSaveSuccessMsg('New photo selected! Click "Save Profile Changes" to apply.');
-        setSaveErrorMsg(null);
-      }
-    };
-    reader.readAsDataURL(file);
-  };
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,7 +66,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
         role: currentRole,
         name: name.trim(),
         phone: phone.trim(),
-        avatar,
         newPassword: newPassword.trim() ? newPassword.trim() : undefined,
         email: currentUser.email,
         teacherId: currentUser.teacherId,
@@ -115,7 +75,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
         onUpdateUser({
           ...currentUser,
           ...response.user,
-          avatar,
           name,
           phone,
         });
@@ -145,32 +104,9 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#E5252A] to-transparent shadow-[0_0_12px_#E5252A]" />
         
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 relative z-10">
-          {/* Avatar with Camera Overlay */}
+          {/* Animated Initials Avatar */}
           <div className="relative group shrink-0">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 border-[#E5252A] shadow-lg shadow-red-500/20 bg-gray-800">
-              <img
-                src={avatar}
-                alt={name}
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="absolute -bottom-2 -right-2 p-2 rounded-xl bg-[#E5252A] hover:bg-[#B30F13] text-white shadow-md transition-transform hover:scale-110 cursor-pointer flex items-center justify-center"
-              title="Upload New Profile Photo"
-            >
-              <Camera className="w-4 h-4" />
-            </button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handlePhotoUpload}
-            />
+            <UserAvatar name={name} size="3xl" shape="rounded" withShine={true} animate={true} />
           </div>
 
           {/* Profile Basic Info */}
@@ -249,71 +185,23 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
       <form onSubmit={handleSaveProfile} className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Personal Info & Avatar Selection */}
         <div className="lg:col-span-7 space-y-6">
-          {/* Card 1: Avatar Customization */}
-          <div className="bg-white dark:bg-gray-800 rounded-3xl border border-gray-200/80 p-6 shadow-2xs">
-            <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100">
+          {/* Card 1: Institutional Initials Identity */}
+          <div className="bg-white dark:bg-gray-800 rounded-3xl border border-gray-200/80 dark:border-gray-700 p-6 shadow-2xs">
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-100 dark:border-gray-700">
               <div className="flex items-center gap-2">
-                <ImageIcon className="w-4 h-4 text-[#E5252A]" />
-                <h3 className="text-sm font-bold text-[#263238] dark:text-white">Profile Photo & Avatar</h3>
+                <Sparkles className="w-4 h-4 text-[#E5252A]" />
+                <h3 className="text-sm font-bold text-[#263238] dark:text-white">Institutional Identity Signature</h3>
               </div>
-              <span className="text-[11px] text-gray-400">JPG, PNG, GIF up to 5MB</span>
+              <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold font-mono">Dynamic Monogram</span>
             </div>
 
-            {/* Custom Photo Upload Button */}
-            <div className="mb-4">
-              <label className="block text-xs font-bold text-[#263238] dark:text-white mb-2">
-                Upload Custom Photo
-              </label>
-              <div
-                onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-gray-200 dark:border-gray-700 hover:border-[#E5252A] rounded-2xl p-4 text-center cursor-pointer transition-colors bg-gray-50/50 hover:bg-red-50/20 group"
-              >
-                <Upload className="w-6 h-6 text-gray-400 group-hover:text-[#E5252A] mx-auto mb-1 transition-colors" />
-                <p className="text-xs font-bold text-gray-700 dark:text-gray-300 group-hover:text-[#E5252A]">
-                  Click to select photo from device
+            <div className="flex items-center gap-4 p-4 rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200/80 dark:border-gray-700">
+              <UserAvatar name={name} size="xl" shape="rounded" withShine={true} />
+              <div className="min-w-0">
+                <h4 className="text-sm font-bold text-[#263238] dark:text-white truncate">{name}</h4>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  Dynamic institutional monogram generated from your first and last name initials.
                 </p>
-                <p className="text-[10px] text-gray-400 mt-0.5">
-                  Drag and drop image or click to browse
-                </p>
-              </div>
-            </div>
-
-            {/* Preset Avatars */}
-            <div>
-              <label className="block text-xs font-bold text-[#263238] dark:text-white mb-2">
-                Or Select from Institutional Avatars
-              </label>
-              <div className="grid grid-cols-6 gap-2 sm:gap-3">
-                {avatarPresets.map((presetUrl, idx) => {
-                  const isSelected = avatar === presetUrl;
-                  return (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => {
-                        setAvatar(presetUrl);
-                        setSaveSuccessMsg('Preset avatar selected! Click "Save Profile Changes" to apply.');
-                      }}
-                      className={`relative rounded-xl overflow-hidden aspect-square border-2 transition-all cursor-pointer ${
-                        isSelected
-                          ? 'border-[#E5252A] ring-2 ring-red-200 scale-105 shadow-md'
-                          : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 opacity-70 hover:opacity-100'
-                      }`}
-                    >
-                      <img
-                        src={presetUrl}
-                        alt={`Preset ${idx + 1}`}
-                        referrerPolicy="no-referrer"
-                        className="w-full h-full object-cover"
-                      />
-                      {isSelected && (
-                        <div className="absolute inset-0 bg-[#E5252A]/30 flex items-center justify-center">
-                          <Check className="w-4 h-4 text-white drop-shadow-md stroke-[3]" />
-                        </div>
-                      )}
-                    </button>
-                  );
-                })}
               </div>
             </div>
           </div>

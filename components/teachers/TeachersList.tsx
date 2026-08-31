@@ -25,6 +25,7 @@ import { Teacher, Department, Schedule, FingerprintDevice, UserRole } from '../.
 import { Badge } from '../common/Badge.tsx';
 import { Pagination } from '../common/Pagination.tsx';
 import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
+import { UserAvatar } from '../common/UserAvatar.tsx';
 import { useToast } from '../common/Toast.tsx';
 import { api } from '../../services/api.ts';
 
@@ -331,23 +332,7 @@ export const TeachersList: React.FC<TeachersListProps> = ({
                       {/* Profile */}
                       <td className="py-3.5 px-4 min-w-[230px]">
                         <div className="flex items-center gap-3">
-                          {t.avatar ? (
-                            <img
-                              src={t.avatar}
-                              alt={t.fullName}
-                              referrerPolicy="no-referrer"
-                              className="w-10 h-10 rounded-full object-cover border border-gray-200 dark:border-gray-700 shrink-0"
-                            />
-                          ) : (
-                            <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-950/60 text-[#E5252A] font-bold text-xs flex items-center justify-center border border-red-200 dark:border-red-800 shrink-0">
-                              {t.fullName
-                                .split(' ')
-                                .slice(-2)
-                                .map((n) => n[0])
-                                .join('')
-                                .toUpperCase()}
-                            </div>
-                          )}
+                          <UserAvatar name={t.fullName} size="md" />
                           <div className="min-w-0">
                             <button
                               onClick={() => onViewTeacher(t.id)}

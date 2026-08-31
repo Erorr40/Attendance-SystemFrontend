@@ -16,6 +16,7 @@ import {
   Menu,
 } from 'lucide-react';
 import { NotificationItem, UserRole } from '../../types/index.ts';
+import { UserAvatar } from '../common/UserAvatar.tsx';
 
 interface HeaderProps {
   currentRole: UserRole;
@@ -87,7 +88,8 @@ export const Header: React.FC<HeaderProps> = ({
         )}
 
         <div>
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <UserAvatar name={userName} size="sm" shape="circle" />
             <h1 className="text-base sm:text-xl font-extrabold text-[#263238] dark:text-white leading-tight">
               Hi, <span className="text-[#E5252A] dark:text-red-400">{userName}</span>
             </h1>

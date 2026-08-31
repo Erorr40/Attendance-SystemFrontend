@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Fingerprint, CheckCircle2, AlertTriangle, Clock, ShieldCheck, Activity } from 'lucide-react';
 import { AttendanceEvent } from '../../types/index.ts';
 import { Badge } from '../common/Badge.tsx';
+import { UserAvatar } from '../common/UserAvatar.tsx';
 
 interface LiveAttendanceStreamProps {
   events: AttendanceEvent[];
@@ -39,13 +40,6 @@ export const LiveAttendanceStream: React.FC<LiveAttendanceStreamProps> = ({
           ) : (
             <AnimatePresence initial={false}>
               {events.map((evt, idx) => {
-                const initials = evt.teacherName
-                  .split(' ')
-                  .slice(-2)
-                  .map((n) => n[0])
-                  .join('')
-                  .toUpperCase();
-
                 const isLatest = idx === 0;
 
                 return (
@@ -62,9 +56,7 @@ export const LiveAttendanceStream: React.FC<LiveAttendanceStreamProps> = ({
                     }`}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-950/60 text-[#E5252A] dark:text-red-400 border border-red-200 dark:border-red-800 flex items-center justify-center font-bold text-xs shrink-0 shadow-2xs">
-                        {initials}
-                      </div>
+                      <UserAvatar name={evt.teacherName} size="sm" />
                       <div className="min-w-0">
                         <p className="font-bold text-[#263238] dark:text-white truncate">{evt.teacherName}</p>
                         <div className="flex items-center gap-1.5 text-[10px] text-gray-500 dark:text-gray-400 truncate">

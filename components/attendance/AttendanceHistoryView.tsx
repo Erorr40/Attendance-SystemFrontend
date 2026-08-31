@@ -13,6 +13,7 @@ import { AttendanceRecord, Department, UserRole } from '../../types/index.ts';
 import { Badge } from '../common/Badge.tsx';
 import { Pagination } from '../common/Pagination.tsx';
 import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
+import { UserAvatar } from '../common/UserAvatar.tsx';
 
 interface AttendanceHistoryViewProps {
   records: AttendanceRecord[];
@@ -191,15 +192,18 @@ export const AttendanceHistoryView: React.FC<AttendanceHistoryViewProps> = ({
               ) : (
                 paginated.map((r) => (
                   <tr key={r.id} className="hover:bg-gray-50/80 dark:hover:bg-gray-700/40 transition-colors">
-                    <td className="py-3.5 px-4">
-                      <div>
-                        <button
-                          onClick={() => onViewTeacher(r.teacherId)}
-                          className="font-bold text-gray-900 dark:text-white hover:text-[#E5252A] dark:hover:text-red-400 transition-colors block text-left cursor-pointer truncate"
-                        >
-                          {r.teacherName}
-                        </button>
-                        <p className="text-[11px] text-gray-400 dark:text-gray-500 font-mono">{r.employeeId}</p>
+                    <td className="py-3.5 px-4 min-w-[220px]">
+                      <div className="flex items-center gap-2.5">
+                        <UserAvatar name={r.teacherName} size="sm" />
+                        <div className="min-w-0">
+                          <button
+                            onClick={() => onViewTeacher(r.teacherId)}
+                            className="font-bold text-gray-900 dark:text-white hover:text-[#E5252A] dark:hover:text-red-400 transition-colors block text-left cursor-pointer truncate"
+                          >
+                            {r.teacherName}
+                          </button>
+                          <p className="text-[11px] text-gray-400 dark:text-gray-500 font-mono">{r.employeeId}</p>
+                        </div>
                       </div>
                     </td>
                     <td className="py-3.5 px-4 whitespace-nowrap font-medium text-gray-700 dark:text-gray-300">

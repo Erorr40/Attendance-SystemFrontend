@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { Modal } from '../common/Modal.tsx';
 import { Badge } from '../common/Badge.tsx';
+import { UserAvatar } from '../common/UserAvatar.tsx';
 import { AttendanceRecord, UserRole } from '../../types/index.ts';
 
 interface AttendanceRecordDetailModalProps {
@@ -50,14 +51,7 @@ export const AttendanceRecordDetailModal: React.FC<AttendanceRecordDetailModalPr
         {/* Top Faculty Banner */}
         <div className="p-4 bg-gray-50 dark:bg-gray-800/60 rounded-2xl border border-gray-200/80 dark:border-gray-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-red-100 dark:bg-red-950/60 text-[#E5252A] dark:text-red-400 font-black text-base flex items-center justify-center border border-red-200 dark:border-red-900/50 shadow-2xs shrink-0">
-              {record.teacherName
-                .split(' ')
-                .slice(-2)
-                .map((n) => n[0])
-                .join('')
-                .toUpperCase()}
-            </div>
+            <UserAvatar name={record.teacherName} size="lg" shape="rounded" />
             <div>
               <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="text-sm font-bold text-[#263238] dark:text-white">

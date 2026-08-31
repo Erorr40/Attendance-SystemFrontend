@@ -22,6 +22,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { UserRole } from '../../types/index.ts';
 import { ElsewedyLogo } from '../common/ElsewedyLogo.tsx';
+import { UserAvatar } from '../common/UserAvatar.tsx';
 
 interface SidebarProps {
   currentView: string;
@@ -212,9 +213,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className="shrink-0 p-3 border-t border-gray-100 dark:border-slate-800/60 bg-gray-50/80 dark:bg-[#080B14]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 overflow-hidden">
-            <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-950/60 text-[#E5252A] dark:text-red-400 flex items-center justify-center font-bold text-xs shrink-0 border border-red-200 dark:border-red-900/60 shadow-2xs">
-              {isEmployee ? 'AH' : isBoard ? 'BD' : 'HR'}
-            </div>
+            <UserAvatar
+              name={
+                isEmployee
+                  ? 'Eng. Ahmed Hassan'
+                  : isBoard
+                  ? 'Eng. Ahmed Raafat'
+                  : 'Mariam Soliman'
+              }
+              size="sm"
+              shape="circle"
+            />
             <div className="truncate">
               <p className="text-xs font-semibold text-[#263238] dark:text-white truncate">
                 {isEmployee

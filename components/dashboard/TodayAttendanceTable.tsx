@@ -14,6 +14,7 @@ import {
 import { AttendanceRecord, Department, UserRole } from '../../types/index.ts';
 import { Badge } from '../common/Badge.tsx';
 import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
+import { UserAvatar } from '../common/UserAvatar.tsx';
 
 interface TodayAttendanceTableProps {
   records: AttendanceRecord[];
@@ -146,15 +147,7 @@ export const TodayAttendanceTable: React.FC<TodayAttendanceTableProps> = ({
                 </td>
               </tr>
             ) : (
-              paginated.map((r) => {
-                const initials = r.teacherName
-                  .split(' ')
-                  .slice(-2)
-                  .map((n) => n[0])
-                  .join('')
-                  .toUpperCase();
-
-                return (
+              paginated.map((r) => (
                   <tr
                     key={r.id}
                     className="hover:bg-gray-50/80 dark:hover:bg-gray-700/40 transition-colors group"
@@ -162,9 +155,7 @@ export const TodayAttendanceTable: React.FC<TodayAttendanceTableProps> = ({
                     {/* Teacher */}
                     <td className="py-3 px-3 min-w-[210px]">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-red-50 dark:bg-red-950/60 text-[#E5252A] dark:text-red-400 border border-red-100 dark:border-red-800 flex items-center justify-center font-bold text-xs shrink-0">
-                          {initials}
-                        </div>
+                        <UserAvatar name={r.teacherName} size="sm" />
                         <div className="min-w-0">
                           <p className="font-bold text-[#263238] dark:text-white group-hover:text-[#E5252A] dark:group-hover:text-red-400 transition-colors leading-snug">
                             {r.teacherName}
@@ -254,8 +245,7 @@ export const TodayAttendanceTable: React.FC<TodayAttendanceTableProps> = ({
                       </div>
                     </td>
                   </tr>
-                );
-              })
+                ))
             )}
           </tbody>
         </table>

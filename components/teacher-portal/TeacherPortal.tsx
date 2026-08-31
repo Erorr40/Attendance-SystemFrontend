@@ -32,6 +32,7 @@ import { Teacher, AttendanceRecord, LeaveRequest, Schedule } from '../../types/i
 import { Badge } from '../common/Badge.tsx';
 import { Modal } from '../common/Modal.tsx';
 import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
+import { UserAvatar } from '../common/UserAvatar.tsx';
 import { useToast } from '../common/Toast.tsx';
 import { api } from '../../services/api.ts';
 
@@ -764,9 +765,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({
           <div className="bg-white dark:bg-[#0C101C] rounded-2xl border border-gray-200/80 dark:border-slate-800/80 p-6 space-y-6 shadow-2xs">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-gray-100 dark:border-slate-800">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-2xl bg-red-100 dark:bg-red-950/60 text-[#E5252A] dark:text-red-400 border border-red-200 dark:border-red-900/60 flex items-center justify-center font-bold text-xl shrink-0 shadow-2xs">
-                  {teacher.fullName.split(' ').slice(-2).map((n) => n[0]).join('')}
-                </div>
+                <UserAvatar name={teacher.fullName} size="xl" shape="rounded" />
                 <div>
                   <h2 className="text-lg font-extrabold text-[#263238] dark:text-white">{teacher.fullName}</h2>
                   <p className="text-xs text-gray-500 font-mono font-semibold">{teacher.employeeId} • {teacher.departmentName}</p>

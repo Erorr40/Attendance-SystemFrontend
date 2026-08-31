@@ -23,6 +23,7 @@ import {
 import { Modal } from '../common/Modal.tsx';
 import { Badge } from '../common/Badge.tsx';
 import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
+import { UserAvatar } from '../common/UserAvatar.tsx';
 import { Teacher, AttendanceRecord, LeaveRequest, Schedule, UserRole } from '../../types/index.ts';
 import { api } from '../../services/api.ts';
 
@@ -238,22 +239,7 @@ export const TeacherDetailModal: React.FC<TeacherDetailModalProps> = ({
           {/* Header Profile Card */}
           <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3.5">
-              {teacher.avatar ? (
-                <img
-                  src={teacher.avatar}
-                  alt={teacher.fullName}
-                  referrerPolicy="no-referrer"
-                  className="w-14 h-14 rounded-full object-cover border-2 border-red-200 shrink-0 shadow-xs"
-                />
-              ) : (
-                <div className="w-14 h-14 rounded-full bg-red-100 text-[#E5252A] border border-red-200 flex items-center justify-center font-black text-lg shrink-0 shadow-xs">
-                  {teacher.fullName
-                    .split(' ')
-                    .slice(-2)
-                    .map((n) => n[0])
-                    .join('')}
-                </div>
-              )}
+              <UserAvatar name={teacher.fullName} size="xl" shape="rounded" />
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="font-bold text-sm sm:text-base text-[#263238] dark:text-white">{teacher.fullName}</h3>

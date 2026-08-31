@@ -15,6 +15,7 @@ import { LeaveRequest, Teacher, UserRole } from '../../types/index.ts';
 import { Badge } from '../common/Badge.tsx';
 import { Modal } from '../common/Modal.tsx';
 import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
+import { UserAvatar } from '../common/UserAvatar.tsx';
 import { useToast } from '../common/Toast.tsx';
 import { api } from '../../services/api.ts';
 
@@ -195,11 +196,14 @@ export const LeaveManagement: React.FC<LeaveManagementProps> = ({
                 filtered.map((l) => (
                   <tr key={l.id} className="hover:bg-gray-50/80 transition-colors">
                     <td className="py-3 px-4">
-                      <div>
-                        <p className="font-bold text-[#263238] dark:text-white">{l.teacherName}</p>
-                        <p className="text-[10px] text-gray-400 font-mono">
-                          {l.employeeId} • {l.departmentName}
-                        </p>
+                      <div className="flex items-center gap-2.5">
+                        <UserAvatar name={l.teacherName} size="sm" />
+                        <div className="min-w-0">
+                          <p className="font-bold text-[#263238] dark:text-white leading-snug">{l.teacherName}</p>
+                          <p className="text-[10px] text-gray-400 font-mono">
+                            {l.employeeId} • {l.departmentName}
+                          </p>
+                        </div>
                       </div>
                     </td>
                     <td className="py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">{l.leaveType}</td>

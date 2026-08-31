@@ -3,6 +3,7 @@ import { Building2, Users, CheckCircle2, Clock, UserX, ChevronRight, Eye } from 
 import { Department, Teacher, UserRole } from '../../types/index.ts';
 import { Badge } from '../common/Badge.tsx';
 import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
+import { UserAvatar } from '../common/UserAvatar.tsx';
 
 interface DepartmentViewProps {
   departments: Department[];
@@ -129,7 +130,12 @@ export const DepartmentView: React.FC<DepartmentViewProps> = ({
                 ) : (
                   deptTeachers.map((t) => (
                     <tr key={t.id} className="hover:bg-gray-50 dark:bg-gray-800/50 transition-colors">
-                      <td className="py-3 px-3 font-bold text-[#263238] dark:text-white min-w-[200px] leading-snug">{t.fullName}</td>
+                      <td className="py-3 px-3 min-w-[200px]">
+                        <div className="flex items-center gap-2">
+                          <UserAvatar name={t.fullName} size="xs" />
+                          <span className="font-bold text-[#263238] dark:text-white leading-snug">{t.fullName}</span>
+                        </div>
+                      </td>
                       <td className="py-3 px-3 font-mono text-gray-500 dark:text-gray-400 whitespace-nowrap">{t.employeeId}</td>
                       <td className="py-3 px-3 text-gray-600 min-w-[160px]">{t.position}</td>
                       <td className="py-3 px-3 whitespace-nowrap">
