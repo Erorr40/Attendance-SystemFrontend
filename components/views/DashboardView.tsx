@@ -18,8 +18,9 @@ interface DashboardViewProps {
   todayRecords: AttendanceRecord[];
   departments: Department[];
   currentRole: UserRole;
-  onOpenScannerModal: () => void;
+  onOpenScannerModal?: () => void;
   onViewTeacher: (teacherId: string) => void;
+  onInspectRecord?: (record: AttendanceRecord) => void;
   onCorrectionSuccess: (updatedRecord: AttendanceRecord) => void;
 }
 
@@ -29,8 +30,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   todayRecords = [],
   departments = [],
   currentRole,
-  onOpenScannerModal,
   onViewTeacher,
+  onInspectRecord,
   onCorrectionSuccess,
 }) => {
   const [selectedRecordForCorrection, setSelectedRecordForCorrection] =
@@ -50,6 +51,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             departments={departments}
             currentRole={currentRole}
             onViewTeacher={onViewTeacher}
+            onInspectRecord={onInspectRecord}
             onOpenCorrectionModal={(record) => setSelectedRecordForCorrection(record)}
           />
         </div>
@@ -58,7 +60,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="lg:col-span-4">
           <LiveAttendanceStream
             events={events}
-            onOpenScannerModal={onOpenScannerModal}
           />
         </div>
       </div>

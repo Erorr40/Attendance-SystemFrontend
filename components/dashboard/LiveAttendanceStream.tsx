@@ -6,12 +6,11 @@ import { Badge } from '../common/Badge.tsx';
 
 interface LiveAttendanceStreamProps {
   events: AttendanceEvent[];
-  onOpenScannerModal: () => void;
+  onOpenScannerModal?: () => void;
 }
 
 export const LiveAttendanceStream: React.FC<LiveAttendanceStreamProps> = ({
   events,
-  onOpenScannerModal,
 }) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200/80 dark:border-gray-700 shadow-xs hover:shadow-md transition-all p-5 flex flex-col justify-between relative overflow-hidden">
@@ -25,17 +24,9 @@ export const LiveAttendanceStream: React.FC<LiveAttendanceStreamProps> = ({
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
-              Live Feed
+              Live Gate Telemetry
             </span>
           </div>
-
-          <button
-            onClick={onOpenScannerModal}
-            className="text-xs font-bold text-[#E5252A] dark:text-red-400 hover:text-[#B30F13] flex items-center gap-1.5 cursor-pointer bg-red-50 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-950/70 px-2.5 py-1 rounded-lg transition-colors"
-          >
-            <Fingerprint className="w-3.5 h-3.5" />
-            <span>Simulate Scan</span>
-          </button>
         </div>
 
         {/* Live Feed List */}

@@ -164,27 +164,27 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Header Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#1C252A] via-[#263238] to-[#12181B] p-6 sm:p-8 text-white border border-gray-800 shadow-xl">
+      <div className="relative overflow-hidden rounded-3xl bg-white dark:bg-gradient-to-r dark:from-[#1C252A] dark:via-[#263238] dark:to-[#12181B] p-6 sm:p-8 text-[#263238] dark:text-white border border-gray-200/90 dark:border-gray-800 shadow-sm transition-colors">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#E5252A] to-transparent shadow-[0_0_12px_#E5252A]" />
 
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-red-500/20 text-red-400 border border-red-500/30 flex items-center gap-1.5">
+              <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-red-50 dark:bg-red-500/20 text-[#E5252A] dark:text-red-400 border border-red-200 dark:border-red-500/30 flex items-center gap-1.5 shadow-2xs">
                 <ShieldAlert className="w-3.5 h-3.5 text-[#E5252A]" />
                 Institutional Audit & Security Trail
               </span>
               {currentRole === 'hr_admin' && (
-                <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center gap-1">
-                  <KeyRound className="w-3 h-3 text-purple-400" />
+                <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-purple-50 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30 flex items-center gap-1 shadow-2xs">
+                  <KeyRound className="w-3 h-3 text-purple-600 dark:text-purple-400" />
                   H.Admin Unrestricted Access
                 </span>
               )}
             </div>
-            <h2 className="text-xl sm:text-3xl font-black tracking-tight text-white">
+            <h2 className="text-xl sm:text-3xl font-black tracking-tight text-[#263238] dark:text-white">
               System Audit & Access Logs
             </h2>
-            <p className="text-xs text-gray-300 mt-1 max-w-2xl">
+            <p className="text-xs text-gray-500 dark:text-gray-300 mt-1 max-w-2xl">
               Capturing all terminal events, single sign-on authentication attempts, H.Admin credential reveals, biometric gate enrollments, and IP signatures.
             </p>
           </div>
@@ -193,16 +193,16 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
             {onRefresh && (
               <button
                 onClick={onRefresh}
-                className="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-2"
+                className="px-3.5 py-2.5 rounded-xl bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 border border-gray-200/90 dark:border-white/20 text-gray-700 dark:text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-2 shadow-2xs"
                 title="Refresh Live Audit Trail"
               >
-                <RefreshCw className="w-3.5 h-3.5 text-gray-300" />
+                <RefreshCw className="w-3.5 h-3.5 text-gray-500 dark:text-gray-300" />
                 <span>Refresh</span>
               </button>
             )}
             <button
               onClick={handleExportCSV}
-              className="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-2"
+              className="px-3.5 py-2.5 rounded-xl bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 border border-gray-200/90 dark:border-white/20 text-gray-700 dark:text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-2 shadow-2xs"
               title="Export as CSV Spreadsheet"
             >
               <Download className="w-3.5 h-3.5" />
@@ -219,7 +219,7 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
         </div>
 
         {/* 4 Interactive Quick Filter Metric Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-6 border-t border-white/10">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-6 border-t border-gray-200/80 dark:border-white/10">
           <button
             onClick={() => {
               setSelectedCategory('ALL');
@@ -227,15 +227,15 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
             }}
             className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
               selectedCategory === 'ALL' && selectedSeverity === 'ALL'
-                ? 'bg-white/15 border-white/30 text-white'
-                : 'bg-black/30 border-white/5 text-gray-300 hover:bg-white/5'
+                ? 'bg-red-50/80 dark:bg-white/15 border-red-200 dark:border-white/30 text-[#E5252A] dark:text-white shadow-xs'
+                : 'bg-gray-50/80 dark:bg-black/30 border-gray-200/80 dark:border-white/5 text-gray-600 dark:text-gray-300 hover:bg-gray-100/80 dark:hover:bg-white/5'
             }`}
           >
             <div className="flex items-center justify-between text-xs text-gray-400 mb-1">
-              <span>Total Audit Events</span>
+              <span className="font-bold text-[11px]">Total Audit Events</span>
               <Activity className="w-3.5 h-3.5 text-gray-400" />
             </div>
-            <p className="text-xl font-black text-white">{stats.total}</p>
+            <p className="text-xl font-black text-gray-900 dark:text-white">{stats.total}</p>
             <span className="text-[10px] text-gray-400">All recorded activities</span>
           </button>
 
@@ -246,16 +246,16 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
             }}
             className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
               selectedSeverity === 'ALERT'
-                ? 'bg-rose-500/20 border-rose-500/50 text-white'
-                : 'bg-black/30 border-white/5 text-gray-300 hover:bg-white/5'
+                ? 'bg-rose-100/90 dark:bg-rose-500/20 border-rose-300 dark:border-rose-500/50 text-rose-900 dark:text-white shadow-xs'
+                : 'bg-rose-50/60 dark:bg-black/30 border-rose-200/60 dark:border-white/5 text-rose-800 dark:text-gray-300 hover:bg-rose-100/60 dark:hover:bg-white/5'
             }`}
           >
-            <div className="flex items-center justify-between text-xs text-rose-400 mb-1">
-              <span>Failed Logins & Alerts</span>
-              <AlertTriangle className="w-3.5 h-3.5 text-rose-400 animate-pulse" />
+            <div className="flex items-center justify-between text-xs text-rose-600 dark:text-rose-400 mb-1">
+              <span className="font-bold text-[11px]">Failed Logins & Alerts</span>
+              <AlertTriangle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 animate-pulse" />
             </div>
-            <p className="text-xl font-black text-rose-400">{stats.failedLogins}</p>
-            <span className="text-[10px] text-rose-300/80">Flagged IP attempts</span>
+            <p className="text-xl font-black text-rose-700 dark:text-rose-400">{stats.failedLogins}</p>
+            <span className="text-[10px] text-rose-600/80 dark:text-rose-300/80">Flagged IP attempts</span>
           </button>
 
           <button
@@ -265,16 +265,16 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
             }}
             className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
               selectedCategory === 'SECURITY'
-                ? 'bg-purple-500/20 border-purple-500/50 text-white'
-                : 'bg-black/30 border-white/5 text-gray-300 hover:bg-white/5'
+                ? 'bg-purple-100/90 dark:bg-purple-500/20 border-purple-300 dark:border-purple-500/50 text-purple-900 dark:text-white shadow-xs'
+                : 'bg-purple-50/60 dark:bg-black/30 border-purple-200/60 dark:border-white/5 text-purple-800 dark:text-gray-300 hover:bg-purple-100/60 dark:hover:bg-white/5'
             }`}
           >
-            <div className="flex items-center justify-between text-xs text-purple-300 mb-1">
-              <span>Security & Passwords</span>
-              <Lock className="w-3.5 h-3.5 text-purple-400" />
+            <div className="flex items-center justify-between text-xs text-purple-600 dark:text-purple-300 mb-1">
+              <span className="font-bold text-[11px]">Security & Passwords</span>
+              <Lock className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
             </div>
-            <p className="text-xl font-black text-purple-300">{stats.securityEvents}</p>
-            <span className="text-[10px] text-purple-300/80">H.Admin reveals / resets</span>
+            <p className="text-xl font-black text-purple-700 dark:text-purple-300">{stats.securityEvents}</p>
+            <span className="text-[10px] text-purple-600/80 dark:text-purple-300/80">H.Admin reveals / resets</span>
           </button>
 
           <button
@@ -284,16 +284,16 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
             }}
             className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer ${
               selectedCategory === 'BIOMETRIC'
-                ? 'bg-emerald-500/20 border-emerald-500/50 text-white'
-                : 'bg-black/30 border-white/5 text-gray-300 hover:bg-white/5'
+                ? 'bg-emerald-100/90 dark:bg-emerald-500/20 border-emerald-300 dark:border-emerald-500/50 text-emerald-900 dark:text-white shadow-xs'
+                : 'bg-emerald-50/60 dark:bg-black/30 border-emerald-200/60 dark:border-white/5 text-emerald-800 dark:text-gray-300 hover:bg-emerald-100/60 dark:hover:bg-white/5'
             }`}
           >
-            <div className="flex items-center justify-between text-xs text-emerald-400 mb-1">
-              <span>Biometric Gate Logs</span>
-              <Fingerprint className="w-3.5 h-3.5 text-emerald-400" />
+            <div className="flex items-center justify-between text-xs text-emerald-600 dark:text-emerald-400 mb-1">
+              <span className="font-bold text-[11px]">Biometric Gate Logs</span>
+              <Fingerprint className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <p className="text-xl font-black text-emerald-400">{stats.biometricEvents}</p>
-            <span className="text-[10px] text-emerald-300/80">Enrolments & Sync</span>
+            <p className="text-xl font-black text-emerald-700 dark:text-emerald-400">{stats.biometricEvents}</p>
+            <span className="text-[10px] text-emerald-600/80 dark:text-emerald-300/80">Enrolments & Sync</span>
           </button>
         </div>
       </div>

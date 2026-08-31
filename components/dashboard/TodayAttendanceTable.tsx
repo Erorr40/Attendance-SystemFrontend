@@ -21,6 +21,7 @@ interface TodayAttendanceTableProps {
   currentRole: UserRole;
   onViewTeacher: (teacherId: string) => void;
   onOpenCorrectionModal: (record: AttendanceRecord) => void;
+  onInspectRecord?: (record: AttendanceRecord) => void;
 }
 
 export const TodayAttendanceTable: React.FC<TodayAttendanceTableProps> = ({
@@ -29,6 +30,7 @@ export const TodayAttendanceTable: React.FC<TodayAttendanceTableProps> = ({
   currentRole,
   onViewTeacher,
   onOpenCorrectionModal,
+  onInspectRecord,
 }) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [selectedDept, setSelectedDept] = useState<string>('ALL');
@@ -231,8 +233,11 @@ export const TodayAttendanceTable: React.FC<TodayAttendanceTableProps> = ({
                     <td className="py-3 px-3 text-right">
                       <div className="flex items-center justify-end gap-1">
                         <button
-                          onClick={() => onViewTeacher(r.teacherId)}
-                          title="View Faculty Profile"
+                          onClick={() => {
+                            if (onInspectRecord) onInspectRecord(r);
+                            else onViewTeacher(r.teacherId);
+                          }}
+                          title="Inspect Attendance Entry Telemetry"
                           className="p-1.5 rounded-md text-gray-400 hover:text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
                         >
                           <Eye className="w-4 h-4" />

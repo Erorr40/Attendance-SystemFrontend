@@ -20,6 +20,7 @@ interface AttendanceHistoryViewProps {
   currentRole: UserRole;
   onViewTeacher: (teacherId: string) => void;
   onOpenCorrectionModal: (record: AttendanceRecord) => void;
+  onInspectRecord?: (record: AttendanceRecord) => void;
 }
 
 export const AttendanceHistoryView: React.FC<AttendanceHistoryViewProps> = ({
@@ -28,6 +29,7 @@ export const AttendanceHistoryView: React.FC<AttendanceHistoryViewProps> = ({
   currentRole,
   onViewTeacher,
   onOpenCorrectionModal,
+  onInspectRecord,
 }) => {
   const safeRecords = Array.isArray(records) ? records : [];
   const safeDepts = Array.isArray(departments) ? departments : [];
@@ -239,8 +241,11 @@ export const AttendanceHistoryView: React.FC<AttendanceHistoryViewProps> = ({
                     <td className="py-3.5 px-4 text-right whitespace-nowrap">
                       <div className="flex items-center justify-end gap-1.5">
                         <button
-                          onClick={() => onViewTeacher(r.teacherId)}
-                          title="View Teacher Details"
+                          onClick={() => {
+                            if (onInspectRecord) onInspectRecord(r);
+                            else onViewTeacher(r.teacherId);
+                          }}
+                          title="Inspect Attendance Entry Telemetry"
                           className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
                         >
                           <Eye className="w-4 h-4" />

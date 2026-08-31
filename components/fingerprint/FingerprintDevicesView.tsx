@@ -20,14 +20,13 @@ import { api } from '../../services/api.ts';
 interface FingerprintDevicesViewProps {
   devices: FingerprintDevice[];
   currentRole: UserRole;
-  onOpenLiveScanner: () => void;
+  onOpenLiveScanner?: () => void;
   onRefreshDevices: () => void;
 }
 
 export const FingerprintDevicesView: React.FC<FingerprintDevicesViewProps> = ({
   devices = [],
   currentRole,
-  onOpenLiveScanner,
   onRefreshDevices,
 }) => {
   const safeDevices = Array.isArray(devices) ? devices : [];
@@ -65,7 +64,7 @@ export const FingerprintDevicesView: React.FC<FingerprintDevicesViewProps> = ({
   return (
     <div className="space-y-5">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200/80 dark:border-gray-700 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-lg font-bold text-[#263238] dark:text-white">Fingerprint Devices</h2>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
@@ -76,18 +75,10 @@ export const FingerprintDevicesView: React.FC<FingerprintDevicesViewProps> = ({
         <div className="flex items-center gap-2">
           <button
             onClick={onRefreshDevices}
-            className="flex items-center gap-1.5 px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-gray-800/50 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:bg-gray-800/50 transition-colors cursor-pointer"
           >
             <RotateCw className="w-3.5 h-3.5" />
             <span>Refresh Telemetry</span>
-          </button>
-
-          <button
-            onClick={onOpenLiveScanner}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#E5252A] hover:bg-[#D01B20] text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
-          >
-            <Fingerprint className="w-4 h-4" />
-            <span>Open Scanner Terminal</span>
           </button>
         </div>
       </div>

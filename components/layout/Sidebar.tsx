@@ -139,29 +139,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             )}
           </div>
         </div>
-
-        {/* Live Scanner Quick Terminal Launch Button */}
-        <div className="p-3 pb-1">
-          <button
-            onClick={() => {
-              onOpenLiveScanner();
-              if (isMobile && onCloseMobile) onCloseMobile();
-            }}
-            className="w-full relative overflow-hidden flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-[#B30F13] via-[#E5252A] to-[#E5252A] hover:brightness-110 text-white text-xs font-bold shadow-md shadow-red-500/20 transition-all cursor-pointer group"
-          >
-            <div className="absolute inset-0 bg-white/10 skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none" />
-
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
-                <Fingerprint className="w-4 h-4 text-white animate-pulse" />
-              </div>
-              <span className="tracking-tight">Biometric Terminal</span>
-            </div>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 font-mono font-bold tracking-wider">
-              LIVE
-            </span>
-          </button>
-        </div>
       </div>
 
       {/* 2. Middle Scrollable Nav Menu */}
@@ -286,7 +263,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <>
       {/* Desktop Persistent Sidebar */}
-      <aside className="hidden md:flex w-64 bg-white dark:bg-[#0C101C] border-r border-gray-200/80 dark:border-slate-800/60 flex-col shrink-0 h-screen sticky top-0 z-20 transition-colors overflow-hidden">
+      <aside className="hidden md:flex w-64 lg:w-72 bg-white dark:bg-[#0C101C] border-r border-gray-200/80 dark:border-slate-800/60 flex-col shrink-0 h-full z-20 transition-colors overflow-hidden">
         {sidebarContent(false)}
       </aside>
 

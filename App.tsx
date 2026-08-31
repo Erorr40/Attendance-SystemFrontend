@@ -20,6 +20,7 @@ import { AddTeacherModal } from './components/teachers/AddTeacherModal.tsx';
 import { EditTeacherModal } from './components/teachers/EditTeacherModal.tsx';
 import { TeacherDetailModal } from './components/teachers/TeacherDetailModal.tsx';
 import { AttendanceCorrectionModal } from './components/dashboard/AttendanceCorrectionModal.tsx';
+import { AttendanceRecordDetailModal } from './components/attendance/AttendanceRecordDetailModal.tsx';
 import { WelcomeSplashScreen } from './components/common/WelcomeSplashScreen.tsx';
 import { SkeletonPageLayout } from './components/common/SkeletonPageLayout.tsx';
 import { SystemLogsView } from './components/views/SystemLogsView.tsx';
@@ -185,6 +186,7 @@ function MainAppContent() {
   const [editingTeacher, setEditingTeacher] = useState<Teacher | null>(null);
   const [viewingTeacherId, setViewingTeacherId] = useState<string | null>(null);
   const [editingCorrectionRecord, setEditingCorrectionRecord] = useState<AttendanceRecord | null>(null);
+  const [inspectingAttendanceRecord, setInspectingAttendanceRecord] = useState<AttendanceRecord | null>(null);
 
   // Initial Load
   const fetchAllData = async () => {
@@ -471,12 +473,12 @@ function MainAppContent() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="min-h-screen bg-[#F8FAFC] dark:bg-[#070A11] flex flex-col antialiased text-[#263238] dark:text-gray-100 transition-colors duration-200 relative overflow-x-hidden"
+            className="h-screen w-screen max-h-screen overflow-hidden bg-[#F8FAFC] dark:bg-[#070A11] flex flex-col antialiased text-[#263238] dark:text-gray-100 transition-colors duration-200 relative"
           >
             {/* Subtle Background Mesh Ornaments */}
             <div className="fixed inset-0 pointer-events-none z-0 opacity-40 dark:opacity-20 bg-[radial-gradient(#E5252A_0.5px,transparent_0.5px)] [background-size:24px_24px]" />
 
-            <div className="flex flex-1 relative z-10 h-screen overflow-hidden">
+            <div className="flex flex-1 relative z-10 h-full max-h-full overflow-hidden">
               {/* Left Sidebar with Elswedy Red Accents */}
               <Sidebar
                 currentView={currentView}
@@ -485,7 +487,6 @@ function MainAppContent() {
                 currentRole={currentRole}
                 setCurrentRole={handleRoleChange}
                 onRoleChange={handleRoleChange}
-                onOpenLiveScanner={() => setIsScannerOpen(true)}
                 onReplayIntro={() => setShowSplash(true)}
                 isDarkMode={isDarkMode}
                 onLogout={handleLogout}
@@ -494,7 +495,7 @@ function MainAppContent() {
               />
 
               {/* Main Content Area */}
-              <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+              <div className="flex-1 flex flex-col min-w-0 h-full max-h-full overflow-hidden">
                 {/* Header with quick dark/light toggle and notifications */}
                 <Header
                   currentRole={currentRole}
@@ -526,8 +527,8 @@ function MainAppContent() {
                           todayRecords={todayRecords}
                           departments={departments}
                           currentRole={currentRole}
-                          onOpenScannerModal={() => setIsScannerOpen(true)}
                           onViewTeacher={(id) => setViewingTeacherId(id)}
+                          onInspectRecord={(record) => setInspectingAttendanceRecord(record)}
                           onCorrectionSuccess={(rec) => {
                             setTodayRecords((prev) =>
                               prev.map((r) => (r.id === rec.id ? rec : r))
@@ -561,6 +562,7 @@ function MainAppContent() {
                           departments={departments}
                           currentRole={currentRole}
                           onViewTeacher={(id) => setViewingTeacherId(id)}
+                          onInspectRecord={(record) => setInspectingAttendanceRecord(record)}
                           onOpenCorrectionModal={(record) => {
                             setEditingCorrectionRecord(record);
                           }}
@@ -716,12 +718,23 @@ function MainAppContent() {
               onClose={() => setViewingTeacherId(null)}
               teacherId={viewingTeacherId}
               schedules={schedules}
+              allAttendanceRecords={allAttendanceRecords.length > 0 ? allAttendanceRecords : todayRecords}
+              allLeaves={leaves}
               currentRole={currentRole}
               currentUserName={currentUserName}
               onOpenBiometricWizard={(t) => {
                 setViewingTeacherId(null);
                 setEnrollingTeacher(t);
               }}
+            />
+
+            <AttendanceRecordDetailModal
+              isOpen={!!inspectingAttendanceRecord}
+              onClose={() => setInspectingAttendanceRecord(null)}
+              record={inspectingAttendanceRecord}
+              currentRole={currentRole}
+              onViewTeacher={(id) => setViewingTeacherId(id)}
+              onOpenCorrection={(rec) => setEditingCorrectionRecord(rec)}
             />
 
             {editingCorrectionRecord && (
