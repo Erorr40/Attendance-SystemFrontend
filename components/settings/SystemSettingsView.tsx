@@ -24,8 +24,8 @@ export const SystemSettingsView: React.FC<SystemSettingsViewProps> = ({
   isDarkMode,
   onToggleDarkMode,
 }) => {
-  const [schoolName, setSchoolName] = useState('Elswedy Applied Technology Schools');
-  const [campus, setCampus] = useState('10th of Ramadan Industrial Campus');
+  const [schoolName, setSchoolName] = useState('Elswedy International Applied Technology Schools');
+  const [campus, setCampus] = useState('10th of Ramadan City, El Sharkia');
   const [academicYear, setAcademicYear] = useState('2025 / 2026');
 
   const [gracePeriod, setGracePeriod] = useState(15);
@@ -114,25 +114,27 @@ export const SystemSettingsView: React.FC<SystemSettingsViewProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
             <label className="block font-bold text-[#263238] dark:text-gray-200 uppercase tracking-wider mb-1">
-              Institution Name
+              Institution Name <span className="text-[10px] text-gray-400 font-normal">(Locked)</span>
             </label>
             <input
               type="text"
               value={schoolName}
-              onChange={(e) => setSchoolName(e.target.value)}
-              className="w-full bg-gray-50/50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-2 font-medium text-[#263238] dark:text-white focus:outline-hidden focus:border-[#E5252A]"
+              disabled
+              readOnly
+              className="w-full bg-gray-100 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 rounded-lg p-2 font-medium text-gray-600 dark:text-gray-400 cursor-not-allowed select-none"
             />
           </div>
 
           <div>
             <label className="block font-bold text-[#263238] dark:text-gray-200 uppercase tracking-wider mb-1">
-              Campus Location
+              Campus Location <span className="text-[10px] text-gray-400 font-normal">(Locked)</span>
             </label>
             <input
               type="text"
               value={campus}
-              onChange={(e) => setCampus(e.target.value)}
-              className="w-full bg-gray-50/50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-2 font-medium text-[#263238] dark:text-white focus:outline-hidden focus:border-[#E5252A]"
+              disabled
+              readOnly
+              className="w-full bg-gray-100 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 rounded-lg p-2 font-medium text-gray-600 dark:text-gray-400 cursor-not-allowed select-none"
             />
           </div>
 

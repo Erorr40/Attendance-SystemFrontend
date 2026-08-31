@@ -137,21 +137,24 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         )}
 
-        {/* Role Quick Selector in Header */}
-        <div className="flex items-center gap-1 bg-gray-50 dark:bg-slate-900 border border-gray-200/80 dark:border-slate-800 rounded-xl p-1 shadow-2xs">
-          <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-1 hidden md:inline">
-            Role:
-          </span>
+        {/* Unified Role Quick Selector in Header */}
+        <div className="relative flex items-center">
+          <div className="absolute left-2.5 pointer-events-none text-xs text-[#E5252A] dark:text-red-400 font-bold">
+            {currentRole === 'hr_admin' ? '📋' : currentRole === 'board' ? '🏛️' : '👨‍🏫'}
+          </div>
           <select
             value={currentRole}
             onChange={(e) => onRoleChange(e.target.value as UserRole)}
-            className="text-xs font-bold bg-white dark:bg-slate-900 text-[#263238] dark:text-white border border-gray-200 dark:border-slate-800 rounded-lg px-2 py-1 shadow-2xs focus:outline-hidden focus:border-[#E5252A] cursor-pointer max-w-[140px] sm:max-w-none truncate"
+            className="text-xs font-bold pl-7 pr-8 py-2 bg-gray-50 dark:bg-slate-900 text-[#263238] dark:text-white border border-gray-200/90 dark:border-slate-800 rounded-xl shadow-2xs focus:outline-hidden focus:border-[#E5252A] dark:focus:border-red-500 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-900/30 hover:bg-gray-100 dark:hover:bg-slate-800 cursor-pointer transition-all appearance-none truncate"
             title="Switch User Role / Viewpoint"
           >
-            <option value="hr_admin">📋 HR Admin</option>
-            <option value="board">🏛️ Board (Read-Only)</option>
-            <option value="employee">👨‍🏫 Faculty Portal</option>
+            <option value="hr_admin" className="bg-white dark:bg-slate-900 text-[#263238] dark:text-white font-bold py-1">HR Administrator</option>
+            <option value="board" className="bg-white dark:bg-slate-900 text-[#263238] dark:text-white font-bold py-1">Board (Read-Only)</option>
+            <option value="employee" className="bg-white dark:bg-slate-900 text-[#263238] dark:text-white font-bold py-1">Faculty Portal</option>
           </select>
+          <div className="absolute right-2.5 pointer-events-none text-gray-400 text-[10px]">
+            ▼
+          </div>
         </div>
 
         {/* Device Status Live Indicator with Pulsing Sonar */}

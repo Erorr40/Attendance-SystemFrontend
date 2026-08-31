@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { AttendanceRecord, Department, Teacher } from '../../types/index.ts';
 import { Badge } from '../common/Badge.tsx';
+import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
 
 interface ReportsViewProps {
   records: AttendanceRecord[];
@@ -223,8 +224,8 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
         </div>
 
         {/* Report Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+        <GrabScrollContainer>
+          <table className="w-full text-left text-xs border-collapse min-w-[850px]">
             <thead>
               <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider">
                 <th className="py-2.5 px-3">Date</th>
@@ -273,7 +274,7 @@ export const ReportsView: React.FC<ReportsViewProps> = ({
               )}
             </tbody>
           </table>
-        </div>
+        </GrabScrollContainer>
       </div>
     </div>
   );

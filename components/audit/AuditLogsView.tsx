@@ -28,6 +28,7 @@ import {
 import { motion, AnimatePresence } from 'motion/react';
 import { AuditLog, UserRole } from '../../types/index.ts';
 import { Pagination } from '../common/Pagination.tsx';
+import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
 
 interface AuditLogsViewProps {
   logs: AuditLog[];
@@ -119,7 +120,7 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
   const getSeverityBadge = (severity?: string, action?: string) => {
     if (severity === 'ALERT' || (action && action.includes('FAILED'))) {
       return {
-        bg: 'bg-rose-50 border-rose-200 text-rose-700',
+        bg: 'bg-rose-50 dark:bg-rose-950/50 border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300',
         dot: 'bg-rose-500',
         label: 'ALERT / BREACH ATTEMPT',
         accent: 'border-l-4 border-l-rose-500',
@@ -127,7 +128,7 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
     }
     if (severity === 'WARNING' || (action && action.includes('PASSWORD_VIEWED'))) {
       return {
-        bg: 'bg-purple-50 border-purple-200 text-purple-700',
+        bg: 'bg-purple-50 dark:bg-purple-950/50 border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300',
         dot: 'bg-purple-500',
         label: 'SECURITY OVERRIDE',
         accent: 'border-l-4 border-l-purple-500',
@@ -135,14 +136,14 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
     }
     if (severity === 'SUCCESS' || (action && (action.includes('LOGIN_SUCCESS') || action.includes('REGISTERED')))) {
       return {
-        bg: 'bg-emerald-50 border-emerald-200 text-emerald-700',
+        bg: 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300',
         dot: 'bg-emerald-500',
         label: 'SUCCESS / VERIFIED',
         accent: 'border-l-4 border-l-emerald-500',
       };
     }
     return {
-      bg: 'bg-blue-50 border-blue-200 text-blue-700',
+      bg: 'bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300',
       dot: 'bg-blue-500',
       label: 'INFO / ROUTINE',
       accent: 'border-l-4 border-l-blue-500',
@@ -387,11 +388,11 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
       </div>
 
       {/* Logs Table / List */}
-      <div className="bg-white dark:bg-gray-800 rounded-3xl border border-gray-200/80 overflow-hidden shadow-2xs">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+      <div className="bg-white dark:bg-gray-800 rounded-3xl border border-gray-200/80 dark:border-gray-700 overflow-hidden shadow-2xs">
+        <GrabScrollContainer>
+          <table className="w-full text-left border-collapse min-w-[1000px]">
             <thead>
-              <tr className="bg-gray-50/80 border-b border-gray-200 dark:border-gray-700 text-[11px] font-extrabold text-gray-600 uppercase tracking-wider">
+              <tr className="bg-gray-50/80 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700 text-[11px] font-extrabold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                 <th className="py-3.5 px-4">Timestamp</th>
                 <th className="py-3.5 px-4">Event Action</th>
                 <th className="py-3.5 px-4">Category & Severity</th>
@@ -401,13 +402,13 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
                 <th className="py-3.5 px-4 text-right">Inspect</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 text-xs">
+            <tbody className="divide-y divide-gray-100 dark:divide-gray-700/60 text-xs">
               {paginatedLogs.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-gray-400">
-                    <Activity className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-                    <p className="font-bold text-gray-600">No matching audit events found</p>
-                    <p className="text-[11px] text-gray-400 mt-1">Try adjusting your filters or search query.</p>
+                  <td colSpan={7} className="py-12 text-center text-gray-400 dark:text-gray-500">
+                    <Activity className="w-8 h-8 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
+                    <p className="font-bold text-gray-600 dark:text-gray-300">No matching audit events found</p>
+                    <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">Try adjusting your filters or search query.</p>
                   </td>
                 </tr>
               ) : (
@@ -420,7 +421,7 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
                     <tr
                       key={log.id}
                       onClick={() => setSelectedLog(log)}
-                      className={`hover:bg-gray-50/80 transition-colors cursor-pointer ${sev.accent}`}
+                      className={`hover:bg-gray-50/80 dark:hover:bg-gray-700/40 transition-colors cursor-pointer ${sev.accent}`}
                     >
                       {/* Timestamp */}
                       <td className="py-3.5 px-4 whitespace-nowrap">
@@ -438,15 +439,15 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
                         <span
                           className={`font-bold ${
                             isFailedLogin
-                              ? 'text-rose-600'
+                              ? 'text-rose-600 dark:text-rose-400'
                               : isPasswordReveal
-                              ? 'text-purple-600'
+                              ? 'text-purple-600 dark:text-purple-400'
                               : 'text-gray-800 dark:text-gray-200'
                           }`}
                         >
                           {log.action}
                         </span>
-                        <div className="text-[10px] text-gray-400">
+                        <div className="text-[10px] text-gray-400 dark:text-gray-500">
                           Target: {log.entity}
                         </div>
                       </td>
@@ -467,7 +468,7 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
 
                       {/* Client IP */}
                       <td className="py-3.5 px-4 whitespace-nowrap">
-                        <div className="flex items-center gap-1.5 font-mono text-[11px] text-gray-700 dark:text-gray-300 bg-gray-100/80 px-2 py-1 rounded-md border border-gray-200/70 w-fit">
+                        <div className="flex items-center gap-1.5 font-mono text-[11px] text-gray-700 dark:text-gray-300 bg-gray-100/80 dark:bg-gray-700/60 px-2 py-1 rounded-md border border-gray-200/70 dark:border-gray-600/60 w-fit">
                           <Globe className="w-3 h-3 text-gray-400" />
                           <span>{log.ipAddress}</span>
                           <button
@@ -475,11 +476,11 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
                               e.stopPropagation();
                               handleCopy(log.ipAddress);
                             }}
-                            className="text-gray-400 hover:text-gray-700 dark:text-gray-300 ml-1"
+                            className="text-gray-400 hover:text-gray-700 dark:text-gray-300 ml-1 cursor-pointer"
                             title="Copy IP Address"
                           >
                             {copiedIp === log.ipAddress ? (
-                              <Check className="w-3 h-3 text-emerald-600" />
+                              <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                             ) : (
                               <Copy className="w-3 h-3" />
                             )}
@@ -489,7 +490,7 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
 
                       {/* Event Details */}
                       <td className="py-3.5 px-4 max-w-xs sm:max-w-md">
-                        <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
+                        <p className="text-xs text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed">
                           {log.details}
                         </p>
                       </td>
@@ -501,7 +502,7 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
                             e.stopPropagation();
                             setSelectedLog(log);
                           }}
-                          className="px-2.5 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 dark:text-gray-300 text-[11px] font-bold transition-colors inline-flex items-center gap-1"
+                          className="px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 text-[11px] font-bold transition-colors inline-flex items-center gap-1 cursor-pointer"
                         >
                           <span>Inspect</span>
                           <ChevronRight className="w-3 h-3 text-gray-400" />
@@ -513,7 +514,7 @@ export const AuditLogsView: React.FC<AuditLogsViewProps> = ({
               )}
             </tbody>
           </table>
-        </div>
+        </GrabScrollContainer>
 
         {/* Pagination */}
         <div className="p-4 border-t border-gray-100 dark:border-gray-700">

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Building2, Users, CheckCircle2, Clock, UserX, ChevronRight, Eye } from 'lucide-react';
 import { Department, Teacher, UserRole } from '../../types/index.ts';
 import { Badge } from '../common/Badge.tsx';
+import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
 
 interface DepartmentViewProps {
   departments: Department[];
@@ -106,7 +107,7 @@ export const DepartmentView: React.FC<DepartmentViewProps> = ({
           </div>
 
           {/* Department Faculty Table */}
-          <div className="overflow-x-auto">
+          <GrabScrollContainer>
             <table className="w-full text-left text-xs border-collapse min-w-[720px]">
               <thead>
                 <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider">
@@ -151,7 +152,7 @@ export const DepartmentView: React.FC<DepartmentViewProps> = ({
                 )}
               </tbody>
             </table>
-          </div>
+          </GrabScrollContainer>
         </div>
       )}
     </div>

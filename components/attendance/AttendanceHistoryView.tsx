@@ -12,6 +12,7 @@ import {
 import { AttendanceRecord, Department, UserRole } from '../../types/index.ts';
 import { Badge } from '../common/Badge.tsx';
 import { Pagination } from '../common/Pagination.tsx';
+import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
 
 interface AttendanceHistoryViewProps {
   records: AttendanceRecord[];
@@ -164,7 +165,7 @@ export const AttendanceHistoryView: React.FC<AttendanceHistoryViewProps> = ({
 
       {/* Attendance Table */}
       <div className="bg-white dark:bg-gray-800 rounded-3xl border border-gray-200/80 dark:border-gray-700 shadow-2xs overflow-hidden transition-colors">
-        <div className="overflow-x-auto">
+        <GrabScrollContainer>
           <table className="w-full text-left text-xs border-collapse min-w-[950px]">
             <thead>
               <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-900/50 text-gray-500 dark:text-gray-400 font-extrabold uppercase tracking-wider text-[11px]">
@@ -248,7 +249,7 @@ export const AttendanceHistoryView: React.FC<AttendanceHistoryViewProps> = ({
                           <button
                             onClick={() => onOpenCorrectionModal(r)}
                             title="Manual Correction"
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-[#E5252A] hover:bg-red-50 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+                            className="p-1.5 rounded-lg text-gray-400 hover:text-[#E5252A] dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
                           >
                             <Edit3 className="w-4 h-4" />
                           </button>
@@ -260,7 +261,7 @@ export const AttendanceHistoryView: React.FC<AttendanceHistoryViewProps> = ({
               )}
             </tbody>
           </table>
-        </div>
+        </GrabScrollContainer>
 
         {/* Pagination */}
         <div className="p-4 border-t border-gray-100 dark:border-gray-700">

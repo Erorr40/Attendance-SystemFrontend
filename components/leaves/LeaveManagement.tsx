@@ -14,6 +14,7 @@ import {
 import { LeaveRequest, Teacher, UserRole } from '../../types/index.ts';
 import { Badge } from '../common/Badge.tsx';
 import { Modal } from '../common/Modal.tsx';
+import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
 import { useToast } from '../common/Toast.tsx';
 import { api } from '../../services/api.ts';
 
@@ -139,7 +140,7 @@ export const LeaveManagement: React.FC<LeaveManagementProps> = ({
           className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#E5252A] hover:bg-[#D01B20] text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
         >
           <Plus className="w-4 h-4" />
-          <span>+ Submit Leave Request</span>
+          <span>Submit Leave Request</span>
         </button>
       </div>
 
@@ -170,8 +171,8 @@ export const LeaveManagement: React.FC<LeaveManagementProps> = ({
 
       {/* Leaves Table */}
       <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200/80 shadow-xs overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+        <GrabScrollContainer>
+          <table className="w-full text-left text-xs border-collapse min-w-[800px]">
             <thead>
               <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider">
                 <th className="py-3 px-4">Teacher</th>
@@ -246,7 +247,7 @@ export const LeaveManagement: React.FC<LeaveManagementProps> = ({
               )}
             </tbody>
           </table>
-        </div>
+        </GrabScrollContainer>
       </div>
 
       {/* Review Modal */}

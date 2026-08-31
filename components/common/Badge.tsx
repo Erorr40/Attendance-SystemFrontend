@@ -80,14 +80,22 @@ export const Badge: React.FC<BadgeProps> = ({ status, size = 'sm', showDot = tru
       dot = 'bg-rose-500';
       break;
     case 'Registered':
-      bg = 'bg-emerald-50';
-      text = 'text-emerald-700 border-emerald-200';
+    case 'ACTIVE':
+    case 'Active':
+      bg = 'bg-emerald-50 dark:bg-emerald-950/50';
+      text = 'text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800';
       dot = 'bg-emerald-500';
       break;
     case 'Not Registered':
-      bg = 'bg-gray-100';
-      text = 'text-gray-600 border-gray-200 dark:border-gray-700';
+      bg = 'bg-gray-100 dark:bg-gray-800';
+      text = 'text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700';
       dot = 'bg-gray-400';
+      break;
+    case 'Inactive':
+    case 'Suspended':
+      bg = 'bg-rose-50 dark:bg-rose-950/50';
+      text = 'text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800';
+      dot = 'bg-rose-500';
       break;
   }
 

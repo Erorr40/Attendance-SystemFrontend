@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Clock, Plus, Users, Calendar, CheckCircle2, Sliders, Shield } from 'lucide-react';
 import { Schedule, UserRole } from '../../types/index.ts';
 import { Modal } from '../common/Modal.tsx';
+import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
 import { api } from '../../services/api.ts';
 
 interface ScheduleManagementProps {
@@ -77,7 +78,7 @@ export const ScheduleManagement: React.FC<ScheduleManagementProps> = ({
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#E5252A] hover:bg-[#D01B20] text-white text-xs font-bold shadow-xs transition-colors cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            <span>+ Create Shift Schedule</span>
+            <span>Create Shift Schedule</span>
           </button>
         )}
       </div>

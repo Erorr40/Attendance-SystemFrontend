@@ -24,6 +24,7 @@ import {
 import { Teacher, Department, Schedule, FingerprintDevice, UserRole } from '../../types/index.ts';
 import { Badge } from '../common/Badge.tsx';
 import { Pagination } from '../common/Pagination.tsx';
+import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
 import { useToast } from '../common/Toast.tsx';
 import { api } from '../../services/api.ts';
 
@@ -299,7 +300,7 @@ export const TeachersList: React.FC<TeachersListProps> = ({
 
       {/* Teachers Data Table */}
       <div className="bg-white dark:bg-gray-800 rounded-3xl border border-gray-200/80 dark:border-gray-700 shadow-2xs overflow-hidden transition-colors">
-        <div className="overflow-x-auto">
+        <GrabScrollContainer>
           <table className="w-full text-left text-xs border-collapse min-w-[1050px]">
             <thead>
               <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-900/50 text-gray-500 dark:text-gray-400 font-extrabold uppercase tracking-wider text-[11px]">
@@ -505,7 +506,7 @@ export const TeachersList: React.FC<TeachersListProps> = ({
               )}
             </tbody>
           </table>
-        </div>
+        </GrabScrollContainer>
 
         {/* Pagination */}
         <div className="p-4 border-t border-gray-100 dark:border-gray-700">

@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { AttendanceRecord, Department, UserRole } from '../../types/index.ts';
 import { Badge } from '../common/Badge.tsx';
+import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
 
 interface TodayAttendanceTableProps {
   records: AttendanceRecord[];
@@ -121,7 +122,7 @@ export const TodayAttendanceTable: React.FC<TodayAttendanceTableProps> = ({
       </div>
 
       {/* Compact Table */}
-      <div className="overflow-x-auto">
+      <GrabScrollContainer>
         <table className="w-full text-left text-xs border-collapse min-w-[880px]">
           <thead>
             <tr className="border-b border-gray-200 dark:border-gray-700 bg-gray-50/70 dark:bg-gray-900/40 text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider">
@@ -227,16 +228,15 @@ export const TodayAttendanceTable: React.FC<TodayAttendanceTableProps> = ({
                     </td>
 
                     {/* Actions */}
-                    <td className="py-3 px-3 text-right whitespace-nowrap">
+                    <td className="py-3 px-3 text-right">
                       <div className="flex items-center justify-end gap-1">
                         <button
                           onClick={() => onViewTeacher(r.teacherId)}
-                          title="View Teacher Profile & History"
-                          className="p-1.5 rounded-md text-gray-400 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+                          title="View Faculty Profile"
+                          className="p-1.5 rounded-md text-gray-400 hover:text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
                         >
                           <Eye className="w-4 h-4" />
                         </button>
-
                         {canEditAttendance && (
                           <button
                             onClick={() => onOpenCorrectionModal(r)}
@@ -254,7 +254,7 @@ export const TodayAttendanceTable: React.FC<TodayAttendanceTableProps> = ({
             )}
           </tbody>
         </table>
-      </div>
+      </GrabScrollContainer>
 
       {/* Pagination Footer */}
       <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400">

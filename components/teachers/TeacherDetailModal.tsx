@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { Modal } from '../common/Modal.tsx';
 import { Badge } from '../common/Badge.tsx';
+import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
 import { Teacher, AttendanceRecord, LeaveRequest, Schedule, UserRole } from '../../types/index.ts';
 import { api } from '../../services/api.ts';
 
@@ -379,45 +380,47 @@ export const TeacherDetailModal: React.FC<TeacherDetailModalProps> = ({
             <h4 className="font-bold text-xs text-[#263238] dark:text-white uppercase tracking-wider mb-2">
               Recent Attendance Ledger
             </h4>
-            <div className="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden max-h-48 overflow-y-auto shadow-2xs">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 font-bold border-b border-gray-200 dark:border-gray-700 text-[10px] uppercase">
-                    <th className="py-2.5 px-3">Date</th>
-                    <th className="py-2.5 px-3">Check-In</th>
-                    <th className="py-2.5 px-3">Check-Out</th>
-                    <th className="py-2.5 px-3">Status</th>
-                    <th className="py-2.5 px-3">Verification Device</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {history.length === 0 ? (
-                    <tr>
-                      <td colSpan={5} className="py-4 text-center text-gray-400">
-                        No previous logs recorded.
-                      </td>
+            <div className="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden shadow-2xs">
+              <GrabScrollContainer className="max-h-48 overflow-y-auto">
+                <table className="w-full text-left border-collapse min-w-[500px]">
+                  <thead>
+                    <tr className="bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 font-bold border-b border-gray-200 dark:border-gray-700 text-[10px] uppercase">
+                      <th className="py-2.5 px-3">Date</th>
+                      <th className="py-2.5 px-3">Check-In</th>
+                      <th className="py-2.5 px-3">Check-Out</th>
+                      <th className="py-2.5 px-3">Status</th>
+                      <th className="py-2.5 px-3">Verification Device</th>
                     </tr>
-                  ) : (
-                    history.slice(0, 10).map((r) => (
-                      <tr key={r.id} className="hover:bg-gray-50 dark:bg-gray-800/50">
-                        <td className="py-2 px-3 font-mono text-gray-600">{r.date}</td>
-                        <td className="py-2 px-3 font-mono font-semibold text-[#263238] dark:text-white">
-                          {r.checkInTime || '--:--'}
-                        </td>
-                        <td className="py-2 px-3 font-mono text-gray-500 dark:text-gray-400">
-                          {r.checkOutTime || '--:--'}
-                        </td>
-                        <td className="py-2 px-3">
-                          <Badge status={r.status} size="sm" />
-                        </td>
-                        <td className="py-2 px-3 text-gray-500 dark:text-gray-400 text-[11px] truncate max-w-[140px]">
-                          {r.deviceName ? r.deviceName.replace('Gate Fingerprint Device ', 'Gate ') : r.verificationMethod}
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {history.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="py-4 text-center text-gray-400">
+                          No previous logs recorded.
                         </td>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+                    ) : (
+                      history.slice(0, 10).map((r) => (
+                        <tr key={r.id} className="hover:bg-gray-50 dark:bg-gray-800/50">
+                          <td className="py-2 px-3 font-mono text-gray-600">{r.date}</td>
+                          <td className="py-2 px-3 font-mono font-semibold text-[#263238] dark:text-white">
+                            {r.checkInTime || '--:--'}
+                          </td>
+                          <td className="py-2 px-3 font-mono text-gray-500 dark:text-gray-400">
+                            {r.checkOutTime || '--:--'}
+                          </td>
+                          <td className="py-2 px-3">
+                            <Badge status={r.status} size="sm" />
+                          </td>
+                          <td className="py-2 px-3 text-gray-500 dark:text-gray-400 text-[11px] truncate max-w-[140px]">
+                            {r.deviceName ? r.deviceName.replace('Gate Fingerprint Device ', 'Gate ') : r.verificationMethod}
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </GrabScrollContainer>
             </div>
           </div>
         </div>

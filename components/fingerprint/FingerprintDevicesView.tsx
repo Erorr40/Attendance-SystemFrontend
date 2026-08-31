@@ -206,24 +206,6 @@ export const FingerprintDevicesView: React.FC<FingerprintDevicesViewProps> = ({
           );
         })}
       </div>
-
-      {/* Offline Architecture Explanation Card */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200/80 p-5 shadow-xs space-y-3">
-        <div className="flex items-center gap-2 font-bold text-sm text-[#263238] dark:text-white">
-          <ShieldCheck className="w-5 h-5 text-emerald-600" />
-          <span>Biometric Hardware Abstraction Layer & Offline Storage Protocol</span>
-        </div>
-        <p className="text-xs text-gray-600 leading-relaxed">
-          The school turnstiles operate through the{' '}
-          <code className="px-1.5 py-0.5 bg-gray-100 rounded text-[#E5252A] font-mono text-[11px]">
-            IFingerprintDeviceService
-          </code>{' '}
-          integration architecture. If the school internet connection drops, the turnstile optical
-          units continue processing scans in offline mode, storing SHA-256 hashed attendance events
-          inside on-device non-volatile Flash memory. Once connectivity restores, an automatic
-          batch sync deduplicates scans and posts real-time entries directly to the server.
-        </p>
-      </div>
     </div>
   );
 };

@@ -16,6 +16,7 @@ import {
   Terminal,
   Zap,
 } from 'lucide-react';
+import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
 import { api } from '../../services/api.ts';
 
 export const SystemLogsView: React.FC = () => {
@@ -359,8 +360,8 @@ export const SystemLogsView: React.FC = () => {
         </div>
 
         {/* Logs Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+        <GrabScrollContainer>
+          <table className="w-full text-left text-xs min-w-[750px]">
             <thead>
               <tr className="border-b border-gray-200/80 dark:border-slate-800 text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider text-[10px]">
                 <th className="py-2.5 px-3">Timestamp</th>
@@ -413,7 +414,7 @@ export const SystemLogsView: React.FC = () => {
               )}
             </tbody>
           </table>
-        </div>
+        </GrabScrollContainer>
       </div>
     </div>
   );

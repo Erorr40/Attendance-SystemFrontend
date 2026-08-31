@@ -6,6 +6,8 @@ interface ElsewedyLogoProps {
   showSubtitle?: boolean;
   subtitleText?: string;
   className?: string;
+  variant?: 'default' | 'dark' | 'white';
+  withShine?: boolean;
 }
 
 export const ElsewedyLogo: React.FC<ElsewedyLogoProps> = ({
@@ -13,6 +15,7 @@ export const ElsewedyLogo: React.FC<ElsewedyLogoProps> = ({
   showSubtitle = true,
   subtitleText = 'ATTENDANCE SYSTEM',
   className = '',
+  variant = 'default',
 }) => {
   // Size scales
   const sizeMap = {
@@ -24,9 +27,13 @@ export const ElsewedyLogo: React.FC<ElsewedyLogoProps> = ({
 
   const currentSize = sizeMap[size];
 
-  // Color schemes: adaptive to dark mode
-  const textColor = 'text-[#263238] dark:text-white';
-  const subColor = 'text-gray-500 dark:text-gray-400';
+  const isWhiteVariant = variant === 'dark' || variant === 'white';
+  // Color schemes: adaptive to dark mode or explicit white variant
+  const textColor = isWhiteVariant ? 'text-white' : 'text-[#263238] dark:text-white';
+  const subColor = isWhiteVariant ? 'text-gray-300' : 'text-gray-500 dark:text-gray-400';
+  const iatsBadge = isWhiteVariant
+    ? 'bg-red-500/20 text-white border-red-500/40'
+    : 'bg-red-600/10 dark:bg-red-500/20 text-[#E5252A] dark:text-red-400 border-red-500/20';
 
   return (
     <div className={`inline-flex items-center ${currentSize.gap} relative select-none ${className}`}>
@@ -45,7 +52,7 @@ export const ElsewedyLogo: React.FC<ElsewedyLogoProps> = ({
           >
             ELSEWEDY
           </span>
-          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-600/10 dark:bg-red-500/20 text-[#E5252A] dark:text-red-400 border border-red-500/20 uppercase tracking-widest hidden sm:inline">
+          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border uppercase tracking-widest hidden sm:inline ${iatsBadge}`}>
             IATS
           </span>
         </div>

@@ -225,7 +225,7 @@ export const LiquidCloudMascot: React.FC<LiquidCloudMascotProps> = ({
             🙈 No Peeking! (Privacy Mode)
           </span>
         ) : (
-          <span>☁️ Biometric AI Guard</span>
+          <span>✨ Attendance Portal</span>
         )}
       </div>
     </div>

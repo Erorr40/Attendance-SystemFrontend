@@ -31,6 +31,7 @@ import {
 import { Teacher, AttendanceRecord, LeaveRequest, Schedule } from '../../types/index.ts';
 import { Badge } from '../common/Badge.tsx';
 import { Modal } from '../common/Modal.tsx';
+import { GrabScrollContainer } from '../common/GrabScrollContainer.tsx';
 import { useToast } from '../common/Toast.tsx';
 import { api } from '../../services/api.ts';
 
@@ -182,66 +183,68 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({
   return (
     <div className="space-y-6">
       {/* Navigation Sub-Header Bar */}
-      <div className="bg-white dark:bg-[#0C101C] rounded-2xl p-2 border border-gray-200/80 dark:border-slate-800/80 shadow-2xs flex items-center gap-1.5 overflow-x-auto text-xs font-semibold">
-        <button
-          onClick={() => onSelectView && onSelectView('teacher-portal')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
-            isOverview
-              ? 'bg-[#E5252A] text-white shadow-xs font-bold'
-              : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
-          }`}
-        >
-          <Layers className="w-4 h-4" />
-          <span>Personal Overview</span>
-        </button>
+      <div className="bg-white dark:bg-[#0C101C] rounded-2xl border border-gray-200/80 dark:border-slate-800/80 shadow-2xs overflow-hidden">
+        <GrabScrollContainer className="p-2 flex items-center gap-1.5 text-xs font-semibold">
+          <button
+            onClick={() => onSelectView && onSelectView('teacher-portal')}
+            className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+              isOverview
+                ? 'bg-[#E5252A] text-white shadow-xs font-bold'
+                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
+            }`}
+          >
+            <Layers className="w-4 h-4" />
+            <span>Personal Overview</span>
+          </button>
 
-        <button
-          onClick={() => onSelectView && onSelectView('teacher-attendance')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
-            isAttendanceView
-              ? 'bg-[#E5252A] text-white shadow-xs font-bold'
-              : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
-          }`}
-        >
-          <CalendarCheck className="w-4 h-4" />
-          <span>My Attendance Log ({safeHistory.length})</span>
-        </button>
+          <button
+            onClick={() => onSelectView && onSelectView('teacher-attendance')}
+            className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+              isAttendanceView
+                ? 'bg-[#E5252A] text-white shadow-xs font-bold'
+                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
+            }`}
+          >
+            <CalendarCheck className="w-4 h-4" />
+            <span>My Attendance Log ({safeHistory.length})</span>
+          </button>
 
-        <button
-          onClick={() => onSelectView && onSelectView('teacher-schedule')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
-            isScheduleView
-              ? 'bg-[#E5252A] text-white shadow-xs font-bold'
-              : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
-          }`}
-        >
-          <Clock className="w-4 h-4" />
-          <span>My Teaching Schedule</span>
-        </button>
+          <button
+            onClick={() => onSelectView && onSelectView('teacher-schedule')}
+            className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+              isScheduleView
+                ? 'bg-[#E5252A] text-white shadow-xs font-bold'
+                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
+            }`}
+          >
+            <Clock className="w-4 h-4" />
+            <span>My Teaching Schedule</span>
+          </button>
 
-        <button
-          onClick={() => onSelectView && onSelectView('teacher-leaves')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
-            isLeavesView
-              ? 'bg-[#E5252A] text-white shadow-xs font-bold'
-              : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
-          }`}
-        >
-          <FileText className="w-4 h-4" />
-          <span>My Leave Requests ({safeLeaves.length})</span>
-        </button>
+          <button
+            onClick={() => onSelectView && onSelectView('teacher-leaves')}
+            className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+              isLeavesView
+                ? 'bg-[#E5252A] text-white shadow-xs font-bold'
+                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
+            }`}
+          >
+            <FileText className="w-4 h-4" />
+            <span>My Leave Requests ({safeLeaves.length})</span>
+          </button>
 
-        <button
-          onClick={() => onSelectView && onSelectView('teacher-profile')}
-          className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
-            isProfileView
-              ? 'bg-[#E5252A] text-white shadow-xs font-bold'
-              : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
-          }`}
-        >
-          <UserCheck className="w-4 h-4" />
-          <span>Biometric Profile</span>
-        </button>
+          <button
+            onClick={() => onSelectView && onSelectView('teacher-profile')}
+            className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
+              isProfileView
+                ? 'bg-[#E5252A] text-white shadow-xs font-bold'
+                : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'
+            }`}
+          >
+            <UserCheck className="w-4 h-4" />
+            <span>Biometric Profile</span>
+          </button>
+        </GrabScrollContainer>
       </div>
 
       {/* ========================================================= */}
@@ -518,7 +521,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({
 
           {/* Attendance Table */}
           <div className="bg-white dark:bg-[#0C101C] rounded-2xl border border-gray-200/80 dark:border-slate-800/80 overflow-hidden shadow-2xs">
-            <div className="overflow-x-auto">
+            <GrabScrollContainer>
               <table className="w-full text-left text-xs border-collapse min-w-[700px]">
                 <thead>
                   <tr className="bg-gray-50 dark:bg-slate-900/80 text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px] border-b border-gray-200 dark:border-slate-800">
@@ -571,7 +574,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({
                   )}
                 </tbody>
               </table>
-            </div>
+            </GrabScrollContainer>
           </div>
         </div>
       )}
@@ -635,7 +638,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({
               </h3>
             </div>
 
-            <div className="overflow-x-auto">
+            <GrabScrollContainer>
               <table className="w-full text-left text-xs border-collapse min-w-[650px]">
                 <thead>
                   <tr className="bg-gray-50 dark:bg-slate-900/80 text-gray-500 dark:text-gray-400 font-bold uppercase text-[10px] border-b border-gray-200 dark:border-slate-800">
@@ -662,7 +665,7 @@ export const TeacherPortal: React.FC<TeacherPortalProps> = ({
                   ))}
                 </tbody>
               </table>
-            </div>
+            </GrabScrollContainer>
           </div>
         </div>
       )}
