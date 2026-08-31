@@ -25,7 +25,7 @@ export const SystemSettingsView: React.FC<SystemSettingsViewProps> = ({
   onToggleDarkMode,
 }) => {
   const [schoolName, setSchoolName] = useState('Elswedy International Applied Technology Schools');
-  const [campus, setCampus] = useState('10th of Ramadan City, El Sharkia');
+  const [campus, setCampus] = useState('VWM4+4QF, October Gardens, Giza Governorate 3252130');
   const [academicYear, setAcademicYear] = useState('2025 / 2026');
 
   const [gracePeriod, setGracePeriod] = useState(15);

@@ -41,6 +41,8 @@ async function handleResponse<T>(res: globalThis.Response): Promise<T> {
     localStorage.removeItem('elswedy_auth_token');
     localStorage.removeItem('elswedy_role');
     localStorage.removeItem('elswedy_user');
+    // Notify the app to redirect to login
+    window.dispatchEvent(new CustomEvent('auth:logout'));
     const err = await res.json().catch(() => ({}));
     throw new Error(err.error || 'Session expired or unauthorized. Please log in.');
   }

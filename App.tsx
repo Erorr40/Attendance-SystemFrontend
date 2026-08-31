@@ -125,6 +125,17 @@ function MainAppContent() {
     showToast('Logged out successfully', 'info');
   };
 
+  // Listen for forced logout from 401 responses in api.ts
+  useEffect(() => {
+    const handleForcedLogout = () => {
+      setSessionUser(null);
+      setIsAuthenticated(false);
+      showToast('Session expired. Please log in again.', 'error');
+    };
+    window.addEventListener('auth:logout', handleForcedLogout);
+    return () => window.removeEventListener('auth:logout', handleForcedLogout);
+  }, [showToast]);
+
   // Dark Mode Theme State
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
     return localStorage.getItem('elswedy_dark_mode') === 'true';
@@ -465,7 +476,7 @@ function MainAppContent() {
             {/* Subtle Background Mesh Ornaments */}
             <div className="fixed inset-0 pointer-events-none z-0 opacity-40 dark:opacity-20 bg-[radial-gradient(#E5252A_0.5px,transparent_0.5px)] [background-size:24px_24px]" />
 
-            <div className="flex flex-1 relative z-10">
+            <div className="flex flex-1 relative z-10 h-screen overflow-hidden">
               {/* Left Sidebar with Elswedy Red Accents */}
               <Sidebar
                 currentView={currentView}
@@ -483,7 +494,7 @@ function MainAppContent() {
               />
 
               {/* Main Content Area */}
-              <div className="flex-1 flex flex-col min-w-0">
+              <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
                 {/* Header with quick dark/light toggle and notifications */}
                 <Header
                   currentRole={currentRole}

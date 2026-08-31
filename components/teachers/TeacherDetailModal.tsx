@@ -52,6 +52,7 @@ export const TeacherDetailModal: React.FC<TeacherDetailModalProps> = ({
     leaves: LeaveRequest[];
   } | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [revealedPassword, setRevealedPassword] = useState<string | null>(null);
   const [copied, setCopied] = useState<boolean>(false);
@@ -60,13 +61,33 @@ export const TeacherDetailModal: React.FC<TeacherDetailModalProps> = ({
   useEffect(() => {
     if (teacherId && isOpen) {
       setLoading(true);
+      setLoadError(null);
       setShowPassword(false);
       setRevealedPassword(null);
       setResetSuccessMsg(null);
       api
         .getTeacherDetails(teacherId, currentRole)
-        .then((res) => setData(res))
-        .catch(() => setData(null))
+        .then((res: any) => {
+          // Handle both response formats:
+          // Node.js backend: { teacher, attendanceHistory, leaves }
+          // ASP.NET backend: raw Teacher object (has id, fullName, etc.)
+          if (res?.teacher) {
+            setData(res);
+          } else if (res?.id && res?.fullName) {
+            setData({
+              teacher: res as Teacher,
+              attendanceHistory: res.attendanceHistory || [],
+              leaves: res.leaves || [],
+            });
+          } else {
+            setData(null);
+            setLoadError('Unexpected response format from server.');
+          }
+        })
+        .catch((err: any) => {
+          setData(null);
+          setLoadError(err?.message || 'Failed to load faculty records. Please try again.');
+        })
         .finally(() => setLoading(false));
     }
   }, [teacherId, isOpen, currentRole]);
@@ -149,9 +170,48 @@ export const TeacherDetailModal: React.FC<TeacherDetailModalProps> = ({
       subtitle="Institutional Credentials, Biometric Enrollment & Attendance Ledger"
       maxWidth="2xl"
     >
-      {loading || !teacher ? (
+      {loading ? (
         <div className="py-12 text-center text-xs text-gray-400">
+          <div className="animate-spin w-6 h-6 border-2 border-gray-300 border-t-[#E5252A] rounded-full mx-auto mb-3" />
           Loading faculty records...
+        </div>
+      ) : loadError ? (
+        <div className="py-12 text-center text-xs">
+          <AlertCircle className="w-8 h-8 text-rose-400 mx-auto mb-2" />
+          <p className="font-bold text-gray-600 dark:text-gray-300">Failed to load faculty profile</p>
+          <p className="text-gray-400 mt-1 max-w-sm mx-auto">{loadError}</p>
+          <button
+            onClick={() => {
+              setLoading(true);
+              setLoadError(null);
+              api
+                .getTeacherDetails(teacherId!, currentRole)
+                .then((res: any) => {
+                  if (res?.teacher) {
+                    setData(res);
+                  } else if (res?.id && res?.fullName) {
+                    setData({ teacher: res as Teacher, attendanceHistory: res.attendanceHistory || [], leaves: res.leaves || [] });
+                  } else {
+                    setData(null);
+                    setLoadError('Unexpected response format.');
+                  }
+                })
+                .catch((err: any) => {
+                  setData(null);
+                  setLoadError(err?.message || 'Failed to load faculty records.');
+                })
+                .finally(() => setLoading(false));
+            }}
+            className="mt-3 px-4 py-1.5 rounded-lg bg-[#E5252A] hover:bg-[#D01B20] text-white text-xs font-bold cursor-pointer transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      ) : !teacher ? (
+        <div className="py-12 text-center text-xs text-gray-400">
+          <AlertCircle className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+          <p className="font-bold text-gray-600 dark:text-gray-300">Faculty record not found</p>
+          <p className="text-gray-400 mt-1">The requested profile could not be retrieved.</p>
         </div>
       ) : (
         <div className="space-y-4 text-xs">

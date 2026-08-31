@@ -138,23 +138,21 @@ export const Header: React.FC<HeaderProps> = ({
         )}
 
         {/* Unified Role Quick Selector in Header */}
-        <div className="relative flex items-center">
-          <div className="absolute left-2.5 pointer-events-none text-xs text-[#E5252A] dark:text-red-400 font-bold">
+        <div className="relative inline-flex items-center">
+          <span className="absolute left-2.5 pointer-events-none text-sm z-10">
             {currentRole === 'hr_admin' ? '📋' : currentRole === 'board' ? '🏛️' : '👨‍🏫'}
-          </div>
+          </span>
           <select
             value={currentRole}
             onChange={(e) => onRoleChange(e.target.value as UserRole)}
-            className="text-xs font-bold pl-7 pr-8 py-2 bg-gray-50 dark:bg-slate-900 text-[#263238] dark:text-white border border-gray-200/90 dark:border-slate-800 rounded-xl shadow-2xs focus:outline-hidden focus:border-[#E5252A] dark:focus:border-red-500 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-900/30 hover:bg-gray-100 dark:hover:bg-slate-800 cursor-pointer transition-all appearance-none truncate"
+            className="text-xs font-bold pl-8 pr-7 py-2 bg-gray-50 dark:bg-slate-900 text-[#263238] dark:text-white border border-gray-200/90 dark:border-slate-800 rounded-xl shadow-2xs focus:outline-hidden focus:border-[#E5252A] dark:focus:border-red-500 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-900/30 hover:bg-gray-100 dark:hover:bg-slate-800 cursor-pointer transition-all appearance-none"
             title="Switch User Role / Viewpoint"
           >
-            <option value="hr_admin" className="bg-white dark:bg-slate-900 text-[#263238] dark:text-white font-bold py-1">HR Administrator</option>
-            <option value="board" className="bg-white dark:bg-slate-900 text-[#263238] dark:text-white font-bold py-1">Board (Read-Only)</option>
-            <option value="employee" className="bg-white dark:bg-slate-900 text-[#263238] dark:text-white font-bold py-1">Faculty Portal</option>
+            <option value="hr_admin" className="bg-white dark:bg-slate-900 text-[#263238] dark:text-white font-bold">HR Administrator</option>
+            <option value="board" className="bg-white dark:bg-slate-900 text-[#263238] dark:text-white font-bold">Board (Read-Only)</option>
+            <option value="employee" className="bg-white dark:bg-slate-900 text-[#263238] dark:text-white font-bold">Faculty Portal</option>
           </select>
-          <div className="absolute right-2.5 pointer-events-none text-gray-400 text-[10px]">
-            ▼
-          </div>
+          <span className="absolute right-2 pointer-events-none text-gray-400 text-[10px]">▼</span>
         </div>
 
         {/* Device Status Live Indicator with Pulsing Sonar */}

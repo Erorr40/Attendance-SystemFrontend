@@ -244,32 +244,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* 3. Pinned Bottom Footer Section */}
       <div className="shrink-0 p-3 border-t border-gray-100 dark:border-slate-800/60 bg-gray-50/80 dark:bg-[#080B14]">
-        <div className="mb-2.5">
-          <label className="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">
-            Active Role (Demo Switcher)
-          </label>
-          <div className="relative">
-            <select
-              value={currentRole}
-              onChange={(e) => {
-                const newRole = e.target.value as UserRole;
-                setRole(newRole);
-                if (newRole === 'employee' || newRole === 'teacher') {
-                  setView('teacher-portal');
-                } else {
-                  setView('dashboard');
-                }
-              }}
-              className="w-full text-xs font-semibold bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 text-[#263238] dark:text-slate-200 rounded-lg px-2.5 py-1.5 shadow-2xs focus:outline-hidden focus:border-[#E5252A] cursor-pointer"
-            >
-              <option value="hr_admin">📋 HR (Full Access)</option>
-              <option value="board">🏛️ Board (Read-Only View)</option>
-              <option value="employee">👨‍🏫 Employee (Faculty Portal)</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between pt-2 border-t border-gray-200/60 dark:border-slate-800/60">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 overflow-hidden">
             <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-950/60 text-[#E5252A] dark:text-red-400 flex items-center justify-center font-bold text-xs shrink-0 border border-red-200 dark:border-red-900/60 shadow-2xs">
               {isEmployee ? 'AH' : isBoard ? 'BD' : 'HR'}
@@ -283,13 +258,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   : 'Mariam Soliman (HR)'}
               </p>
               <p className="text-[10px] text-gray-500 dark:text-gray-400 capitalize truncate">
-                {currentRole === 'hr_admin' ? 'HR (Full Access)' : currentRole === 'board' ? 'Board (Read-Only)' : 'Employee (Teacher)'}
+                {currentRole === 'hr_admin' ? 'HR Administrator' : currentRole === 'board' ? 'Board (Read-Only)' : 'Faculty Member'}
               </p>
             </div>
           </div>
 
           <button
-            title="Reset / Logout"
+            title="Logout"
             onClick={() => {
               if (onLogout) {
                 onLogout();
